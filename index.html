@@ -171,33 +171,58 @@
   </form>
 
   <script>
-    document.getElementById("formulario").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const formData = Object.fromEntries(new FormData(form).entries());
-      const mensaje = document.getElementById("mensaje");
-      mensaje.textContent = "";
+  document.getElementById("formulario").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+      ETAPA: form.etapa.value,
+      DOCUMENTO_TERCERO: form.docTercero.value,
+      DOCUMENTO_ESTUDIANTE: form.docEstudiante.value,
+      DOCUMENTO_TITULAR: form.docTitular.value,
+      CONTRATO: form.contrato.value,
+      GESTOR_ASIGNADO: form.gestor.value,
+      VALOR_CONTRATO: form.valorContrato.value,
+      TOTAL_PAGOS: form.totalPagos.value,
+      TOTAL_PENDIENTE: form.totalPendiente.value,
+      TARIFA_PRONTO_PAGO_O_CONVERSO: form.tarifaProntoPago.value,
+      NEGOCIACION: form.negociacion.value,
+      FINANCIERA: form.financiera.value,
+      PORCENTAJE_DESCUENTO: form.descuento.value,
+      VALOR_DESCUENTO: form.valorDescuento.value,
+      VALOR_A_PAGAR: form.valorPagar.value,
+      FECHA_PAGO: form.fechaPago.value,
+      SALDO_FINAL: form.saldoFinal.value,
+      ESTADO: form.estado.value,
+      OBSERVACIONES: form.observaciones.value,
+      AUDITORIA_COFAE: form.auditoria.value
+    };
 
-      try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbwKlJlMEyQq4SuSCI4x266oh1OGgN6bCcekJ9uMhhurGXFuHkpytIqAKXYuvuz-hboA/exec", {
-          method: "POST",
-          body: JSON.stringify(formData),
-          headers: { "Content-Type": "application/json" }
-        });
+    const mensaje = document.getElementById("mensaje");
+    mensaje.textContent = "";
 
-        if (response.ok) {
-          form.reset();
-          mensaje.innerHTML = "<div class='success'>✅ Registro guardado correctamente en la hoja de cálculo.</div>";
-        } else {
-          mensaje.innerHTML = "<div class='error'>❌ Error al guardar. Intente nuevamente.</div>";
-        }
-      } catch (error) {
-        mensaje.innerHTML = "<div class='error'>⚠️ Error de conexión. Revise el enlace del script o su conexión a internet.</div>";
+    try {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbxnfFt13E_DLqKevzjEQHiPI8Yix0VRoQsc00ISaH8yN1QcsJMNgej0_tqN_8bWEj08/exec", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+      });
+
+      const result = await response.json();
+
+      if (result.result === "success") {
+        form.reset();
+        mensaje.innerHTML = "<div class='success'>✅ Registro guardado correctamente en la hoja de cálculo.</div>";
+      } else {
+        mensaje.innerHTML = `<div class='error'>❌ Error al guardar: ${result.message}</div>`;
       }
-    });
-  </script>
+    } catch (error) {
+      mensaje.innerHTML = "<div class='error'>⚠️ Error de conexión. Revise el enlace del script o su conexión a internet.</div>";
+    }
+  });
+</script>
 
 </body>
 </html>
+
 
 
