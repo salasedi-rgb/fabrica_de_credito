@@ -1,235 +1,132 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Formulario de Contratos - Smart Idiomas</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulario de Registro</title>
   <style>
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f4f6f8;
-      margin: 0;
-      padding: 30px;
-    }
-    h2 {
-      text-align: center;
-      color: #004aad;
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      padding: 20px;
     }
     form {
       background: #fff;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 25px 40px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    label {
-      font-weight: 600;
-      display: block;
-      margin-top: 15px;
-      color: #333;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
+      padding: 20px;
       border-radius: 8px;
-      margin-top: 5px;
-      font-size: 14px;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
-    textarea {
-      height: 80px;
-      resize: vertical;
+    input, select, textarea, button {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
     }
     button {
-      display: block;
-      width: 100%;
-      margin-top: 25px;
-      background-color: #004aad;
+      background: #007bff;
       color: white;
       border: none;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 10px;
       cursor: pointer;
-      transition: 0.3s;
+      font-size: 16px;
+      padding: 10px;
     }
     button:hover {
-      background-color: #003a8c;
-    }
-    .success {
-      background-color: #d1e7dd;
-      color: #0f5132;
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 15px;
-    }
-    .error {
-      background-color: #f8d7da;
-      color: #842029;
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 15px;
+      background: #0056b3;
     }
   </style>
 </head>
 <body>
+  <h2>Registro de Información</h2>
+  <form id="registroForm">
+    <label>ETAPA:</label>
+    <input type="text" name="ETAPA" required />
 
-  <h2>Formulario de Contratos</h2>
+    <label>DOCUMENTO_TERCERO:</label>
+    <input type="text" name="DOCUMENTO_TERCERO" />
 
-  <form id="formulario">
-    <label>ETAPA</label>
-    <select name="etapa" required>
-      <option value="">Seleccione una etapa</option>
-      <option>Etapa 1</option>
-      <option>Etapa 2</option>
-      <option>Etapa 3</option>
-    </select>
+    <label>DOCUMENTO_ESTUDIANTE:</label>
+    <input type="text" name="DOCUMENTO_ESTUDIANTE" />
 
-    <label>DOCUMENTO TERCERO</label>
-    <input type="text" name="docTercero" required>
+    <label>DOCUMENTO_TITULAR:</label>
+    <input type="text" name="DOCUMENTO_TITULAR" />
 
-    <label>DOCUMENTO ESTUDIANTE</label>
-    <input type="text" name="docEstudiante" required>
+    <label>CONTRATO:</label>
+    <input type="text" name="CONTRATO" />
 
-    <label>DOCUMENTO TITULAR</label>
-    <input type="text" name="docTitular" required>
+    <label>GESTOR_ASIGNADO:</label>
+    <input type="text" name="GESTOR_ASIGNADO" />
 
-    <label>CONTRATO</label>
-    <input type="text" name="contrato" required>
+    <label>VALOR_CONTRATO:</label>
+    <input type="number" name="VALOR_CONTRATO" />
 
-    <label>GESTOR ASIGNADO</label>
-    <input type="text" name="gestor" required>
+    <label>TOTAL_PAGOS:</label>
+    <input type="number" name="TOTAL_PAGOS" />
 
-    <label>VALOR CONTRATO</label>
-    <input type="number" step="0.01" name="valorContrato" required>
+    <label>TOTAL_PENDIENTE:</label>
+    <input type="number" name="TOTAL_PENDIENTE" />
 
-    <label>TOTAL PAGOS</label>
-    <input type="number" step="0.01" name="totalPagos" required>
+    <label>TARIFA_PRONTO_PAGO_O_CONVERSO:</label>
+    <input type="text" name="TARIFA_PRONTO_PAGO_O_CONVERSO" />
 
-    <label>TOTAL PENDIENTE</label>
-    <input type="number" step="0.01" name="totalPendiente" required>
+    <label>NEGOCIACION:</label>
+    <input type="text" name="NEGOCIACION" />
 
-    <label>TARIFA PRONTO PAGO O CONVERSO</label>
-    <input type="number" step="0.01" name="tarifaProntoPago" required>
+    <label>FINANCIERA:</label>
+    <input type="text" name="FINANCIERA" />
 
-    <label>NEGOCIACIÓN</label>
-    <select name="negociacion" required>
-      <option value="">Seleccione una opción</option>
-      <option>Pronto Pago</option>
-      <option>Converso</option>
-      <option>Normal</option>
-    </select>
+    <label>PORCENTAJE_DESCUENTO:</label>
+    <input type="text" name="PORCENTAJE_DESCUENTO" />
 
-    <label>FINANCIERA</label>
-    <select name="financiera" required>
-      <option value="">Seleccione una financiera</option>
-      <option>Banco de Bogotá</option>
-      <option>BBVA</option>
-      <option>Bancolombia</option>
-      <option>Davivienda</option>
-      <option>Otro</option>
-    </select>
+    <label>VALOR_DESCUENTO:</label>
+    <input type="number" name="VALOR_DESCUENTO" />
 
-    <label>% DESCUENTO</label>
-    <input type="number" step="0.01" name="descuento">
+    <label>VALOR_A_PAGAR:</label>
+    <input type="number" name="VALOR_A_PAGAR" />
 
-    <label>VALOR DESCUENTO</label>
-    <input type="number" step="0.01" name="valorDescuento">
+    <label>FECHA_PAGO:</label>
+    <input type="date" name="FECHA_PAGO" />
 
-    <label>VALOR A PAGAR</label>
-    <input type="number" step="0.01" name="valorPagar">
+    <label>SALDO_FINAL:</label>
+    <input type="number" name="SALDO_FINAL" />
 
-    <label>FECHA DE PAGO</label>
-    <input type="date" name="fechaPago" required>
+    <label>ESTADO:</label>
+    <input type="text" name="ESTADO" />
 
-    <label>SALDO FINAL</label>
-    <input type="number" step="0.01" name="saldoFinal">
+    <label>OBSERVACIONES:</label>
+    <textarea name="OBSERVACIONES"></textarea>
 
-    <label>ESTADO</label>
-    <select name="estado" required>
-      <option value="">Seleccione estado</option>
-      <option>Pendiente</option>
-      <option>Pagado</option>
-      <option>Cancelado</option>
-      <option>Revisión</option>
-    </select>
+    <label>AUDITORIA_COFAE:</label>
+    <input type="text" name="AUDITORIA_COFAE" />
 
-    <label>OBSERVACIONES</label>
-    <textarea name="observaciones"></textarea>
+    <label>FECHA_REVISION_CARTERA:</label>
+    <input type="date" name="FECHA_REVISION_CARTERA" />
 
-    <label>AUDITORÍA COFAE</label>
-    <select name="auditoria" required>
-      <option value="">Seleccione</option>
-      <option>Aprobado</option>
-      <option>Revisar</option>
-      <option>Rechazado</option>
-    </select>
+    <label>NOTA_CREDITO:</label>
+    <input type="text" name="NOTA_CREDITO" />
 
-    <label>FECHA REVISIÓN CARTERA</label>
-    <input type="date" name="fechaRevision">
-
-    <label>NOTA CRÉDITO</label>
-    <input type="text" name="notaCredito">
-
-    <button type="submit">Guardar Registro</button>
-    <div id="mensaje"></div>
+    <button type="submit">Enviar</button>
   </form>
 
   <script>
-    document.getElementById("formulario").addEventListener("submit", async (e) => {
+    document.getElementById("registroForm").addEventListener("submit", function(e) {
       e.preventDefault();
-      const form = e.target;
-      const data = {
-        ETAPA: form.etapa.value,
-        DOCUMENTO_TERCERO: form.docTercero.value,
-        DOCUMENTO_ESTUDIANTE: form.docEstudiante.value,
-        DOCUMENTO_TITULAR: form.docTitular.value,
-        CONTRATO: form.contrato.value,
-        GESTOR_ASIGNADO: form.gestor.value,
-        VALOR_CONTRATO: form.valorContrato.value,
-        TOTAL_PAGOS: form.totalPagos.value,
-        TOTAL_PENDIENTE: form.totalPendiente.value,
-        TARIFA_PRONTO_PAGO_O_CONVERSO: form.tarifaProntoPago.value,
-        NEGOCIACION: form.negociacion.value,
-        FINANCIERA: form.financiera.value,
-        PORCENTAJE_DESCUENTO: form.descuento.value,
-        VALOR_DESCUENTO: form.valorDescuento.value,
-        VALOR_A_PAGAR: form.valorPagar.value,
-        FECHA_PAGO: form.fechaPago.value,
-        SALDO_FINAL: form.saldoFinal.value,
-        ESTADO: form.estado.value,
-        OBSERVACIONES: form.observaciones.value,
-        AUDITORIA_COFAE: form.auditoria.value,
-        FECHA_REVISION_CARTERA: form.fechaRevision.value,
-        NOTA_CREDITO: form.notaCredito.value
-      };
 
-      const mensaje = document.getElementById("mensaje");
-      mensaje.textContent = "";
+      const formData = Object.fromEntries(new FormData(this).entries());
 
-      try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbwhV5Cv18bk1IvNOiIrrgAr47yE6Z560NTJMSms23zrpGYyDUXgt0WqnIn7-lJV7aW-/exec", {
-          method: "POST",
-          mode: "cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
+      fetch("https://script.google.com/macros/s/AKfycbxuAz0yK8VXQjCgNjXlxI86MGpmxmu8xrFi7IUERNG0YBsM8EIFbfLZ9xFZ-Yi1DRUg/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
 
-        const result = await response.json();
-
-        if (result.result === "success") {
-          form.reset();
-          mensaje.innerHTML = "<div class='success'>✅ Registro guardado correctamente en la hoja de cálculo.</div>";
-        } else {
-          mensaje.innerHTML = `<div class='error'>❌ Error al guardar: ${result.message}</div>`;
-        }
-      } catch (error) {
-        mensaje.innerHTML = `<div class='error'>⚠️ Error de conexión: ${error.message}</div>`;
-        console.error(error);
-      }
+      alert("✅ Datos enviados correctamente (modo no-cors).");
+      this.reset();
     });
   </script>
-
 </body>
 </html>
-
