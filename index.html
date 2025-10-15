@@ -3,130 +3,268 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Formulario de Registro</title>
+  <title>Fábrica de Crédito - Smart Idiomas</title>
+
+  <!-- Estilos base -->
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f8f9fa;
-      padding: 20px;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
     }
-    form {
-      background: #fff;
-      padding: 20px;
+
+    header {
+      background-color: #004aad;
+      color: white;
+      padding: 15px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    header input {
+      padding: 8px 12px;
       border-radius: 8px;
-      max-width: 600px;
-      margin: 0 auto;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      border: none;
+      width: 250px;
     }
-    input, select, textarea, button {
-      width: 100%;
-      padding: 8px;
-      margin: 6px 0;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
+
+    main {
+      padding: 20px 40px;
     }
-    button {
-      background: #007bff;
+
+    .btn-add {
+      background-color: #004aad;
       color: white;
       border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
       cursor: pointer;
-      font-size: 16px;
-      padding: 10px;
+      float: right;
+      transition: 0.3s;
     }
-    button:hover {
-      background: #0056b3;
+
+    .btn-add:hover {
+      background-color: #003b8e;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #004aad;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f5ff;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      width: 700px;
+      padding: 25px 35px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+      color: #004aad;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 4px;
+    }
+
+    button.save {
+      background-color: #004aad;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 8px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button.save:hover {
+      background-color: #003a8f;
+    }
+
+    .close {
+      float: right;
+      font-size: 22px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .close:hover {
+      color: black;
     }
   </style>
 </head>
+
 <body>
-  <h2>Registro de Información</h2>
-  <form id="registroForm">
-    <label>ETAPA:</label>
-    <input type="text" name="ETAPA" required />
+  <header>
+    <h1>🏦 FÁBRICA DE CRÉDITO</h1>
+    <input type="text" id="buscar" placeholder="Buscar contrato..." />
+  </header>
 
-    <label>DOCUMENTO_TERCERO:</label>
-    <input type="text" name="DOCUMENTO_TERCERO" />
+  <main>
+    <button class="btn-add" id="btnAdd">+ ADD</button>
 
-    <label>DOCUMENTO_ESTUDIANTE:</label>
-    <input type="text" name="DOCUMENTO_ESTUDIANTE" />
+    <table id="tablaContratos">
+      <thead>
+        <tr>
+          <th>Contrato</th>
+          <th>Estudiante</th>
+          <th>Financiera</th>
+          <th>Estado</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Aquí se insertarán los registros desde Google Sheets -->
+      </tbody>
+    </table>
+  </main>
 
-    <label>DOCUMENTO_TITULAR:</label>
-    <input type="text" name="DOCUMENTO_TITULAR" />
+  <!-- Modal Formulario -->
+  <div class="modal" id="modalForm">
+    <div class="modal-content">
+      <span class="close" id="cerrarModal">&times;</span>
+      <h2>Nuevo Contrato</h2>
 
-    <label>CONTRATO:</label>
-    <input type="text" name="CONTRATO" />
+      <form id="formContrato">
+        <label>Contrato</label>
+        <input type="text" name="contrato" required>
 
-    <label>GESTOR_ASIGNADO:</label>
-    <input type="text" name="GESTOR_ASIGNADO" />
+        <label>Documento Estudiante</label>
+        <input type="text" name="docEstudiante" required>
 
-    <label>VALOR_CONTRATO:</label>
-    <input type="number" name="VALOR_CONTRATO" />
+        <label>Financiera</label>
+        <select name="financiera" required>
+          <option value="">Seleccione</option>
+          <option>Banco de Bogotá</option>
+          <option>Bancolombia</option>
+          <option>Davivienda</option>
+        </select>
 
-    <label>TOTAL_PAGOS:</label>
-    <input type="number" name="TOTAL_PAGOS" />
+        <label>Estado</label>
+        <select name="estado" required>
+          <option value="">Seleccione</option>
+          <option>Preventiva</option>
+          <option>Administrativa</option>
+        </select>
 
-    <label>TOTAL_PENDIENTE:</label>
-    <input type="number" name="TOTAL_PENDIENTE" />
+        <label>Valor Contrato</label>
+        <input type="number" step="0.01" name="valorContrato" required>
 
-    <label>TARIFA_PRONTO_PAGO_O_CONVERSO:</label>
-    <input type="text" name="TARIFA_PRONTO_PAGO_O_CONVERSO" />
-
-    <label>NEGOCIACION:</label>
-    <input type="text" name="NEGOCIACION" />
-
-    <label>FINANCIERA:</label>
-    <input type="text" name="FINANCIERA" />
-
-    <label>PORCENTAJE_DESCUENTO:</label>
-    <input type="text" name="PORCENTAJE_DESCUENTO" />
-
-    <label>VALOR_DESCUENTO:</label>
-    <input type="number" name="VALOR_DESCUENTO" />
-
-    <label>VALOR_A_PAGAR:</label>
-    <input type="number" name="VALOR_A_PAGAR" />
-
-    <label>FECHA_PAGO:</label>
-    <input type="date" name="FECHA_PAGO" />
-
-    <label>SALDO_FINAL:</label>
-    <input type="number" name="SALDO_FINAL" />
-
-    <label>ESTADO:</label>
-    <input type="text" name="ESTADO" />
-
-    <label>OBSERVACIONES:</label>
-    <textarea name="OBSERVACIONES"></textarea>
-
-    <label>AUDITORIA_COFAE:</label>
-    <input type="text" name="AUDITORIA_COFAE" />
-
-    <label>FECHA_REVISION_CARTERA:</label>
-    <input type="date" name="FECHA_REVISION_CARTERA" />
-
-    <label>NOTA_CREDITO:</label>
-    <input type="text" name="NOTA_CREDITO" />
-
-    <button type="submit">Enviar</button>
-  </form>
+        <button type="submit" class="save">Guardar Registro</button>
+      </form>
+    </div>
+  </div>
 
   <script>
-    document.getElementById("registroForm").addEventListener("submit", function(e) {
+    const modal = document.getElementById("modalForm");
+    const btnAdd = document.getElementById("btnAdd");
+    const cerrarModal = document.getElementById("cerrarModal");
+    const tablaBody = document.querySelector("#tablaContratos tbody");
+
+    btnAdd.onclick = () => modal.style.display = "flex";
+    cerrarModal.onclick = () => modal.style.display = "none";
+    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxuAz0yK8VXQjCgNjXlxI86MGpmxmu8xrFi7IUERNG0YBsM8EIFbfLZ9xFZ-Yi1DRUg/exec";
+
+    document.getElementById("formContrato").addEventListener("submit", async (e) => {
       e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
 
-      const formData = Object.fromEntries(new FormData(this).entries());
+      try {
+        await fetch(scriptURL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
 
-      fetch("https://script.google.com/macros/s/AKfycbxuAz0yK8VXQjCgNjXlxI86MGpmxmu8xrFi7IUERNG0YBsM8EIFbfLZ9xFZ-Yi1DRUg/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      });
-
-      alert("✅ Datos enviados correctamente (modo no-cors).");
-      this.reset();
+        alert("✅ Registro guardado correctamente");
+        modal.style.display = "none";
+        e.target.reset();
+        cargarContratos(); // recarga la tabla
+      } catch (error) {
+        alert("⚠️ Error al guardar");
+        console.error(error);
+      }
     });
+
+    async function cargarContratos() {
+      try {
+        const res = await fetch(scriptURL);
+        const registros = await res.json();
+        tablaBody.innerHTML = "";
+
+        registros.forEach(r => {
+          const fila = `
+            <tr>
+              <td>${r.CONTRATO}</td>
+              <td>${r.DOCUMENTO_ESTUDIANTE}</td>
+              <td>${r.FINANCIERA}</td>
+              <td>${r.ESTADO}</td>
+              <td>${r.VALOR_CONTRATO}</td>
+            </tr>`;
+          tablaBody.innerHTML += fila;
+        });
+      } catch (err) {
+        console.log("Error cargando datos:", err);
+      }
+    }
+
+    cargarContratos();
   </script>
 </body>
 </html>
