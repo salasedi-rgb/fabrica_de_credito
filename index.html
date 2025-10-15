@@ -5,78 +5,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fábrica de Crédito - Smart Idiomas</title>
 
-  <!-- Estilos base -->
+  <!-- Fuente y estilos -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --color-primary: #004aad;
+      --color-accent: #0078ff;
+      --color-bg: #f5f7fb;
+      --color-text: #1e1e2f;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
     body {
-      font-family: "Segoe UI", sans-serif;
-      background-color: #f4f6f8;
       margin: 0;
-      padding: 0;
+      background: var(--color-bg);
+      color: var(--color-text);
     }
 
     header {
-      background-color: #004aad;
+      background: var(--color-primary);
       color: white;
-      padding: 15px 25px;
+      padding: 20px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
     header h1 {
       margin: 0;
       font-size: 22px;
+      letter-spacing: 0.5px;
     }
 
-    header input {
-      padding: 8px 12px;
-      border-radius: 8px;
+    .search-box input {
+      padding: 10px 14px;
+      border-radius: var(--radius);
       border: none;
-      width: 250px;
+      width: 280px;
+      outline: none;
+      font-size: 14px;
     }
 
     main {
-      padding: 20px 40px;
+      padding: 40px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
     }
 
     .btn-add {
-      background-color: #004aad;
+      background: var(--color-accent);
       color: white;
       border: none;
       padding: 10px 18px;
-      border-radius: 8px;
+      border-radius: var(--radius);
       font-weight: 600;
       cursor: pointer;
-      float: right;
       transition: 0.3s;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     }
 
     .btn-add:hover {
-      background-color: #003b8e;
+      background: #0063d1;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
       background: white;
-      border-radius: 12px;
+      border-radius: var(--radius);
       overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
     th, td {
-      text-align: left;
-      padding: 12px 15px;
+      padding: 14px 18px;
       border-bottom: 1px solid #eee;
+      font-size: 14px;
+      text-align: left;
     }
 
     th {
-      background-color: #004aad;
+      background: var(--color-primary);
       color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    tr:hover {
-      background-color: #f1f5ff;
+    tr:hover td {
+      background: #f1f5ff;
     }
 
     /* Modal */
@@ -88,56 +116,77 @@
       background: rgba(0,0,0,0.5);
       justify-content: center;
       align-items: center;
+      z-index: 10;
     }
 
     .modal-content {
       background: white;
-      width: 700px;
-      padding: 25px 35px;
-      border-radius: 12px;
+      width: 600px;
+      padding: 30px 40px;
+      border-radius: var(--radius);
+      position: relative;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     .modal-content h2 {
+      color: var(--color-primary);
       margin-top: 0;
-      color: #004aad;
     }
 
     label {
       font-weight: 600;
       display: block;
-      margin-top: 10px;
+      margin-top: 12px;
+      font-size: 14px;
     }
 
     input, select {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-top: 4px;
+      border-radius: var(--radius);
+      margin-top: 6px;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--color-primary);
+      outline: none;
     }
 
     button.save {
-      background-color: #004aad;
+      background-color: var(--color-primary);
       color: white;
       border: none;
-      padding: 10px;
+      padding: 12px;
       width: 100%;
-      border-radius: 8px;
+      border-radius: var(--radius);
       margin-top: 20px;
       cursor: pointer;
       font-weight: 600;
+      font-size: 15px;
+      transition: 0.3s;
     }
 
     button.save:hover {
-      background-color: #003a8f;
+      background-color: #003b8e;
     }
 
     .close {
-      float: right;
+      position: absolute;
+      right: 20px;
+      top: 15px;
       font-size: 22px;
       cursor: pointer;
-      color: #666;
+      color: #888;
+      transition: 0.3s;
     }
 
     .close:hover {
@@ -148,12 +197,17 @@
 
 <body>
   <header>
-    <h1>🏦 FÁBRICA DE CRÉDITO</h1>
-    <input type="text" id="buscar" placeholder="Buscar contrato..." />
+    <h1>🏦 Fábrica de Crédito - Smart Idiomas</h1>
+    <div class="search-box">
+      <input type="text" id="buscar" placeholder="🔍 Buscar contrato o estudiante..." />
+    </div>
   </header>
 
   <main>
-    <button class="btn-add" id="btnAdd">+ ADD</button>
+    <div class="top-bar">
+      <h2 style="margin:0;">📋 Lista de Contratos</h2>
+      <button class="btn-add" id="btnAdd">+ Nuevo Contrato</button>
+    </div>
 
     <table id="tablaContratos">
       <thead>
@@ -166,7 +220,7 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Aquí se insertarán los registros desde Google Sheets -->
+        <!-- Los registros se insertarán dinámicamente -->
       </tbody>
     </table>
   </main>
@@ -175,13 +229,13 @@
   <div class="modal" id="modalForm">
     <div class="modal-content">
       <span class="close" id="cerrarModal">&times;</span>
-      <h2>Nuevo Contrato</h2>
+      <h2>Agregar Contrato</h2>
 
       <form id="formContrato">
         <label>Contrato</label>
         <input type="text" name="contrato" required>
 
-        <label>Documento Estudiante</label>
+        <label>Documento del Estudiante</label>
         <input type="text" name="docEstudiante" required>
 
         <label>Financiera</label>
@@ -197,12 +251,13 @@
           <option value="">Seleccione</option>
           <option>Preventiva</option>
           <option>Administrativa</option>
+          <option>Negociación</option>
         </select>
 
-        <label>Valor Contrato</label>
+        <label>Valor del Contrato</label>
         <input type="number" step="0.01" name="valorContrato" required>
 
-        <button type="submit" class="save">Guardar Registro</button>
+        <button type="submit" class="save">💾 Guardar Registro</button>
       </form>
     </div>
   </div>
@@ -235,7 +290,7 @@
         alert("✅ Registro guardado correctamente");
         modal.style.display = "none";
         e.target.reset();
-        cargarContratos(); // recarga la tabla
+        cargarContratos();
       } catch (error) {
         alert("⚠️ Error al guardar");
         console.error(error);
@@ -255,7 +310,7 @@
               <td>${r.DOCUMENTO_ESTUDIANTE}</td>
               <td>${r.FINANCIERA}</td>
               <td>${r.ESTADO}</td>
-              <td>${r.VALOR_CONTRATO}</td>
+              <td>$${parseFloat(r.VALOR_CONTRATO).toLocaleString()}</td>
             </tr>`;
           tablaBody.innerHTML += fila;
         });
