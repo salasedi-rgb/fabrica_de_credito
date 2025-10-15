@@ -3,88 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestión de Contratos - Smart Idiomas</title>
+<title>FÁBRICA DE CRÉDITO - Smart Idiomas</title>
 <style>
   :root {
-    --primary: #004aad;
-    --primary-light: #e7f0ff;
-    --text: #333;
-    --bg: #f5f7fb;
+    --primary: #004AAD;
+    --primary-light: #eaf1ff;
+    --bg: #f8faff;
+    --text: #1f1f1f;
     --radius: 14px;
   }
 
   body {
+    margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: var(--bg);
-    margin: 0;
-    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   header {
-    background-color: var(--primary);
-    color: #fff;
     text-align: center;
-    padding: 20px 10px;
-    font-size: 22px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    margin-top: 40px;
   }
 
-  main {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 30px;
+  header h1 {
+    color: var(--primary);
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+
+  header p {
+    color: #666;
+    font-size: 15px;
+    margin-top: 0;
   }
 
   form {
-    background: #fff;
-    width: 100%;
-    max-width: 900px;
+    background-color: white;
+    width: 90%;
+    max-width: 480px;
     border-radius: var(--radius);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     padding: 30px 40px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-    animation: slideUp 0.6s ease;
+    margin: 30px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    animation: fadeIn 0.8s ease;
   }
 
-  @keyframes slideUp {
-    from {opacity: 0; transform: translateY(30px);}
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(25px);}
     to {opacity: 1; transform: translateY(0);}
-  }
-
-  h2 {
-    text-align: center;
-    color: var(--primary);
-    margin-bottom: 25px;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 18px 25px;
   }
 
   label {
     font-weight: 600;
     color: var(--text);
-    display: block;
-    margin-bottom: 5px;
+    font-size: 14px;
+    margin-bottom: 4px;
   }
 
   input, select, textarea {
     width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 14px;
+    padding: 12px 14px;
+    border: 1px solid #d0d8e4;
+    border-radius: 10px;
+    font-size: 15px;
     transition: all 0.3s ease;
+    background-color: #fafcff;
   }
 
   input:focus, select:focus, textarea:focus {
     border-color: var(--primary);
-    outline: none;
+    background-color: white;
     box-shadow: 0 0 0 2px var(--primary-light);
+    outline: none;
   }
 
   textarea {
@@ -93,76 +88,127 @@
   }
 
   button {
-    background: var(--primary);
-    color: #fff;
-    font-size: 16px;
+    background-color: var(--primary);
+    color: white;
     border: none;
     border-radius: 10px;
-    padding: 14px 0;
-    width: 100%;
-    margin-top: 25px;
-    cursor: pointer;
+    font-size: 16px;
+    padding: 14px;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin-top: 10px;
     transition: background 0.3s ease;
   }
 
   button:hover {
-    background: #003a8c;
+    background-color: #003A8C;
   }
 
   .success, .error {
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 8px;
     text-align: center;
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 10px;
   }
 
   .success {
-    background: #d1e7dd;
+    background-color: #d1e7dd;
     color: #0f5132;
   }
 
   .error {
-    background: #f8d7da;
+    background-color: #f8d7da;
     color: #842029;
   }
+
 </style>
 </head>
 <body>
 
-<header>📘 Sistema de Gestión de Contratos - Smart Idiomas</header>
+<header>
+  <h1>📘 FÁBRICA DE CRÉDITO</h1>
+  <p>Registro de contratos - Smart Idiomas</p>
+</header>
 
-<main>
-  <form id="formulario">
-    <h2>Registro de Contrato</h2>
+<form id="formulario">
+  <label>Etapa</label>
+  <select name="ETAPA" required>
+    <option value="">Seleccione</option>
+    <option>Preventiva</option>
+    <option>Administrativa</option>
+  </select>
 
-    <div class="grid">
-      <div><label>Etapa</label><select name="ETAPA"><option value="">Seleccione</option><option>Etapa 1</option><option>Etapa 2</option></select></div>
-      <div><label>Documento Tercero</label><input type="text" name="DOCUMENTO_TERCERO" required></div>
-      <div><label>Documento Estudiante</label><input type="text" name="DOCUMENTO_ESTUDIANTE" required></div>
-      <div><label>Documento Titular</label><input type="text" name="DOCUMENTO_TITULAR" required></div>
-      <div><label>Contrato</label><input type="text" name="CONTRATO" required></div>
-      <div><label>Gestor Asignado</label><input type="text" name="GESTOR_ASIGNADO" required></div>
-      <div><label>Valor Contrato</label><input type="number" step="0.01" name="VALOR_CONTRATO" required></div>
-      <div><label>Total Pagos</label><input type="number" step="0.01" name="TOTAL_PAGOS" required></div>
-      <div><label>Total Pendiente</label><input type="number" step="0.01" name="TOTAL_PENDIENTE"></div>
-      <div><label>Tarifa Pronto Pago o Converso</label><input type="number" step="0.01" name="TARIFA_PRONTO_PAGO_O_CONVERSO"></div>
-      <div><label>Negociación</label><select name="NEGOCIACION"><option>Pronto Pago</option><option>Converso</option><option>Normal</option></select></div>
-      <div><label>Financiera</label><select name="FINANCIERA"><option>Bancolombia</option><option>BBVA</option><option>Davivienda</option><option>Otro</option></select></div>
-      <div><label>% Descuento</label><input type="number" step="0.01" name="PORCENTAJE_DESCUENTO"></div>
-      <div><label>Valor Descuento</label><input type="number" step="0.01" name="VALOR_DESCUENTO"></div>
-      <div><label>Valor a Pagar</label><input type="number" step="0.01" name="VALOR_A_PAGAR"></div>
-      <div><label>Fecha de Pago</label><input type="date" name="FECHA_PAGO" required></div>
-      <div><label>Saldo Final</label><input type="number" step="0.01" name="SALDO_FINAL"></div>
-      <div><label>Estado</label><select name="ESTADO"><option>Pendiente</option><option>Pagado</option><option>Cancelado</option><option>Revisión</option></select></div>
-      <div style="grid-column: 1 / -1;"><label>Observaciones</label><textarea name="OBSERVACIONES"></textarea></div>
-    </div>
+  <label>Documento Tercero</label>
+  <input type="text" name="DOCUMENTO_TERCERO" required>
 
-    <button type="submit">💾 Guardar Contrato</button>
-    <div id="mensaje"></div>
-  </form>
-</main>
+  <label>Documento Estudiante</label>
+  <input type="text" name="DOCUMENTO_ESTUDIANTE" required>
+
+  <label>Documento Titular</label>
+  <input type="text" name="DOCUMENTO_TITULAR" required>
+
+  <label>Contrato</label>
+  <input type="text" name="CONTRATO" required>
+
+  <label>Gestor Asignado</label>
+  <input type="text" name="GESTOR_ASIGNADO" required>
+
+  <label>Valor Contrato</label>
+  <input type="number" name="VALOR_CONTRATO" step="0.01" required>
+
+  <label>Total Pagos</label>
+  <input type="number" name="TOTAL_PAGOS" step="0.01" required>
+
+  <label>Total Pendiente</label>
+  <input type="number" name="TOTAL_PENDIENTE" step="0.01">
+
+  <label>Tarifa Pronto Pago o Converso</label>
+  <input type="number" name="TARIFA_PRONTO_PAGO_O_CONVERSO" step="0.01">
+
+  <label>Negociación</label>
+  <select name="NEGOCIACION">
+    <option>Pronto Pago</option>
+    <option>Converso</option>
+    <option>Normal</option>
+  </select>
+
+  <label>Financiera</label>
+  <select name="FINANCIERA">
+    <option>Bancolombia</option>
+    <option>BBVA</option>
+    <option>Davivienda</option>
+    <option>Otro</option>
+  </select>
+
+  <label>% Descuento</label>
+  <input type="number" name="PORCENTAJE_DESCUENTO" step="0.01">
+
+  <label>Valor Descuento</label>
+  <input type="number" name="VALOR_DESCUENTO" step="0.01">
+
+  <label>Valor a Pagar</label>
+  <input type="number" name="VALOR_A_PAGAR" step="0.01">
+
+  <label>Fecha de Pago</label>
+  <input type="date" name="FECHA_PAGO" required>
+
+  <label>Saldo Final</label>
+  <input type="number" name="SALDO_FINAL" step="0.01">
+
+  <label>Estado</label>
+  <select name="ESTADO">
+    <option>Pendiente</option>
+    <option>Pagado</option>
+    <option>Cancelado</option>
+    <option>Revisión</option>
+  </select>
+
+  <label>Observaciones</label>
+  <textarea name="OBSERVACIONES"></textarea>
+
+  <button type="submit">💾 Guardar Contrato</button>
+  <div id="mensaje"></div>
+</form>
 
 <script>
 document.getElementById("formulario").addEventListener("submit", async (e) => {
@@ -174,7 +220,7 @@ document.getElementById("formulario").addEventListener("submit", async (e) => {
   mensaje.textContent = "";
 
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbxuAz0yK8VXQjCgNjXlxI86MGpmxmu8xrFi7IUERNG0YBsM8EIFbfLZ9xFZ-Yi1DRUg/exec", {
+    await fetch("https://script.google.com/macros/s/AKfycbxuAz0yK8VXQjCgNjXlxI86MGpmxmu8xrFi7IUERNG0YBsM8EIFbfLZ9xFZ-Yi1DRUg/exec", {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
