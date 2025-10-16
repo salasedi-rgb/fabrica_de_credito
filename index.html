@@ -131,7 +131,7 @@
         </select>
 
         <label>Documento Tercero</label>
-        <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" required maxlength="10"
+        <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" maxlength="10"
                oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
 
         <label>Documento Estudiante</label>
@@ -223,6 +223,7 @@
     </form>
 
     <script>
+        // 🔹 Funciones de formato y cálculo
         function limpiarNumero(valor) {
             return parseFloat(valor.replace(/[^\d]/g, '')) || 0;
         }
@@ -292,7 +293,27 @@
             document.getElementById('valorDescuento').value = formatNumber(valorDescuento);
             document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
         }
+
+        // 🔹 Envío de datos al Google Apps Script
+        document.getElementById("formulario").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = new FormData(form);
+
+            fetch("https://script.google.com/macros/s/AKfycbxuAz0yK8VXQjCgNjXlxI86MGpmxmu8xrFi7IUERNG0YBsM8EIFbfLZ9xFZ-Yi1DRUg/exec", {
+                method: "POST",
+                body: data
+            })
+            .then(response => response.text())
+            .then(result => {
+                alert("✅ Registro guardado correctamente");
+                form.reset();
+            })
+            .catch(error => {
+                console.error("❌ Error al guardar:", error);
+                alert("Error al enviar los datos. Intenta nuevamente.");
+            });
+        });
     </script>
 </body>
 </html>
-
