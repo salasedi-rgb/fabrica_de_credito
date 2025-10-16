@@ -109,14 +109,14 @@
             background-color: #003A8C;
         }
 
-        .hidden {
-            display: none;
-        }
-
         #mensaje {
             text-align: center;
             font-weight: bold;
             margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -264,13 +264,24 @@
 
             let valorAPagar = 0;
             switch (negociacion?.toUpperCase()) {
-                case 'CLÁUSULA ESPECIAL': valorAPagar = 699999; break;
-                case 'CLÁUSULA PENAL': valorAPagar = Math.floor(totalPendiente * 0.25); break;
-                case 'PAGO TOTAL': valorAPagar = totalPendiente; break;
+                case 'CLÁUSULA ESPECIAL':
+                    valorAPagar = 699999;
+                    break;
+                case 'CLÁUSULA PENAL':
+                    valorAPagar = Math.floor(totalPendiente * 0.25);
+                    break;
+                case 'PAGO TOTAL':
+                    valorAPagar = totalPendiente;
+                    break;
                 case 'PRONTO PAGO':
-                case 'CONVERSO': valorAPagar = Math.max(0, tarifaProntoPago - totalPagos); break;
-                case 'DESCUENTO': valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100))); break;
-                default: valorAPagar = 0;
+                case 'CONVERSO':
+                    valorAPagar = Math.max(0, tarifaProntoPago - totalPagos);
+                    break;
+                case 'DESCUENTO':
+                    valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100)));
+                    break;
+                default:
+                    valorAPagar = 0;
             }
 
             const valorDescuento = Math.max(0, totalPendiente - valorAPagar);
@@ -291,23 +302,27 @@
             document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
         }
 
-        document.getElementById("formulario").addEventListener("submit", async function (e) {
+        document.getElementById("formulario").addEventListener("submit", async function(e) {
             e.preventDefault();
             const mensaje = document.getElementById("mensaje");
             mensaje.textContent = "⏳ Enviando datos...";
             mensaje.style.color = "#444";
 
-            const data = {};
             const formElements = this.elements;
+            const data = {};
+
             for (let i = 0; i < formElements.length; i++) {
                 const el = formElements[i];
-                if (el.name) data[el.name] = el.value;
+                if (el.name) {
+                    data[el.name] = el.value;
+                }
             }
 
             try {
                 const response = await fetch(webAppUrl, {
                     method: "POST",
-                    body: new URLSearchParams(data),
+                    body: JSON.stringify(data),
+                    headers: { "Content-Type": "application/json" }
                 });
 
                 const result = await response.json();
@@ -329,3 +344,4 @@
     </script>
 </body>
 </html>
+
