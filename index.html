@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fábrica de crédito</title>
     <style>
-        /* --- Estilos originales --- */
         :root {
             --primary: #004AAD;
             --primary-light: #eaf1ff;
@@ -16,21 +15,121 @@
             --warning: #FFC107;
             --error: #DC3545;
         }
-        body { margin:0; font-family:'Segoe UI',sans-serif; background-color:var(--bg); display:flex; flex-direction:column; align-items:center; }
-        header { text-align:center; margin-top:40px; }
-        header h1 { color:var(--primary); font-size:26px; margin-bottom:10px; }
-        header p { color:#666; font-size:15px; margin-top:0; }
-        form { background-color:white; width:90%; max-width:480px; border-radius:var(--radius); box-shadow:0 8px 20px rgba(0,0,0,0.08); padding:30px 40px; margin:30px 0; display:flex; flex-direction:column; gap:18px; animation:fadeIn 0.8s ease; }
-        @keyframes fadeIn { from {opacity:0; transform:translateY(25px);} to {opacity:1; transform:translateY(0);} }
-        label { font-weight:600; color:var(--text); font-size:14px; margin-bottom:4px; }
-        input, select, textarea { width:100%; padding:12px 14px; border:1px solid #d0d8e4; border-radius:10px; font-size:15px; transition:all 0.3s ease; background-color:#fafcff; }
-        input:focus, select:focus, textarea:focus { border-color:var(--primary); background-color:white; box-shadow:0 0 0 2px var(--primary-light); outline:none; }
-        textarea { resize:vertical; min-height:60px; }
-        input[readonly] { background-color:#eef3ff; border-color:#cbd6f1; }
-        button { background-color:var(--primary); color:white; border:none; border-radius:10px; font-size:16px; padding:14px; font-weight:600; cursor:pointer; margin-top:10px; transition: background 0.3s ease; }
-        button:hover { background-color:#003A8C; }
-        .hidden { display:none; }
-        #customAlert { position:fixed; top:20px; right:20px; background-color:var(--success); color:white; padding:15px 20px; border-radius:var(--radius); box-shadow:0 4px 10px rgba(0,0,0,0.1); z-index:1000; animation:fadeIn 0.5s ease; font-size:14px; font-weight:600; }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 15px;
+            margin-top: 0;
+        }
+
+        form {
+            background-color: white;
+            width: 90%;
+            max-width: 480px;
+            border-radius: var(--radius);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            padding: 30px 40px;
+            margin: 30px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(25px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d0d8e4;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background-color: #fafcff;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            background-color: white;
+            box-shadow: 0 0 0 2px var(--primary-light);
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        input[readonly] {
+            background-color: #eef3ff;
+            border-color: #cbd6f1;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            padding: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #003A8C;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #customAlert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+            font-size: 14px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -151,15 +250,15 @@
             event.preventDefault();
             mostrarAlerta('🟡 Guardando registro…', 'var(--warning)');
 
-            // Reemplazar 0 o vacíos en campos ocultos por cadena vacía
-            const formData = new FormData(this);
-            for (const [key, value] of formData.entries()) {
-                const input = this.querySelector(`[name="${key}"]`);
-                if (input?.classList.contains('hidden') || input?.type === 'hidden') {
-                    if (!value || value === '0') formData.set(key, '');
+            // Convertir campos ocultos no diligenciados a vacíos
+            const hiddenInputs = formulario.querySelectorAll('input, select, textarea');
+            hiddenInputs.forEach(input => {
+                if (input.offsetParent === null && !input.value) {
+                    input.value = '';
                 }
-            }
+            });
 
+            const formData = new FormData(this);
             fetch(this.action, {
                 method: 'POST',
                 body: formData,
@@ -175,13 +274,23 @@
             });
         });
 
-        function limpiarNumero(valor) { return parseFloat(valor.replace(/[^\d]/g, '')) || 0; }
-        function formatNumber(num) { return num.toLocaleString('es-CO', {minimumFractionDigits: 0}); }
+        function limpiarNumero(valor) {
+            return parseFloat(valor.replace(/[^\d]/g, '')) || 0;
+        }
+
+        function formatNumber(num) {
+            return num.toLocaleString('es-CO', {minimumFractionDigits: 0});
+        }
 
         function actualizarCamposCondicionales() {
             const negociacion = document.getElementById('negociacion').value;
-            document.getElementById('tarifaContainer').classList.toggle('hidden', !(negociacion === 'PRONTO PAGO' || negociacion === 'CONVERSO'));
-            document.getElementById('descuentoContainer').classList.toggle('hidden', negociacion !== 'DESCUENTO');
+            const tarifaContainer = document.getElementById('tarifaContainer');
+            const descuentoContainer = document.getElementById('descuentoContainer');
+            const valorDescuentoContainer = document.getElementById('valorDescuentoContainer');
+            const saldoFinalContainer = document.getElementById('saldoFinalContainer');
+
+            tarifaContainer.classList.toggle('hidden', !(negociacion === 'PRONTO PAGO' || negociacion === 'CONVERSO'));
+            descuentoContainer.classList.toggle('hidden', negociacion !== 'DESCUENTO');
             calcularValores();
         }
 
@@ -199,13 +308,24 @@
 
             let valorAPagar = 0;
             switch (negociacion?.toUpperCase()) {
-                case 'CLÁUSULA ESPECIAL': valorAPagar = 699999; break;
-                case 'CLÁUSULA PENAL': valorAPagar = Math.floor(totalPendiente * 0.25); break;
-                case 'PAGO TOTAL': valorAPagar = totalPendiente; break;
+                case 'CLÁUSULA ESPECIAL':
+                    valorAPagar = 699999;
+                    break;
+                case 'CLÁUSULA PENAL':
+                    valorAPagar = Math.floor(totalPendiente * 0.25);
+                    break;
+                case 'PAGO TOTAL':
+                    valorAPagar = totalPendiente;
+                    break;
                 case 'PRONTO PAGO':
-                case 'CONVERSO': valorAPagar = Math.max(0, tarifaProntoPago - totalPagos); break;
-                case 'DESCUENTO': valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100))); break;
-                default: valorAPagar = 0;
+                case 'CONVERSO':
+                    valorAPagar = Math.max(0, tarifaProntoPago - totalPagos);
+                    break;
+                case 'DESCUENTO':
+                    valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100)));
+                    break;
+                default:
+                    valorAPagar = 0;
             }
 
             const valorDescuento = Math.max(0, totalPendiente - valorAPagar);
