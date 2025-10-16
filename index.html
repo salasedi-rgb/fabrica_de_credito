@@ -137,23 +137,24 @@
         </select>
 
         <label>Documento Tercero</label>
-        <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" maxlength="10"
-               oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10);">
+        <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" required maxlength="10"
+               oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
 
         <label>Documento Estudiante</label>
-        <input type="text" id="documentoEstudiante" name="DOCUMENTO_ESTUDIANTE" maxlength="10"
-               oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10);">
+        <input type="text" id="documentoEstudiante" name="DOCUMENTO_ESTUDIANTE" required maxlength="10"
+               oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
 
         <label>Documento Titular</label>
-        <input type="text" id="documentoTitular" name="DOCUMENTO_TITULAR" maxlength="10"
-               oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10);">
+        <input type="text" id="documentoTitular" name="DOCUMENTO_TITULAR" required maxlength="10"
+               oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
 
         <label>Contrato</label>
         <input type="text" id="contrato" name="CONTRATO" required minlength="5" maxlength="16"
                oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'').slice(0,16);">
 
         <label>Gestor Asignado</label>
-        <input type="text" id="gestorAsignado" name="GESTOR_ASIGNADO" required>
+        <input type="text" id="gestorAsignado" name="GESTOR_ASIGNADO" required maxlength="10"
+               oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
 
         <label>Valor Contrato</label>
         <input type="text" id="valorContrato" name="VALOR_CONTRATO" oninput="calcularValores()" required>
@@ -216,19 +217,21 @@
         </div>
 
         <label>Estado</label>
-        <select name="ESTADO" required>
+        <select name="ESTADO" required oninput="calcularValores()">
             <option value=""></option>
             <option>APROBADO</option>
         </select>
 
         <label>Observaciones</label>
-        <textarea name="OBSERVACIONES"></textarea>
+        <textarea name="OBSERVACIONES" oninput="calcularValores()"></textarea>
 
         <button type="submit">Guardar</button>
         <p id="mensaje"></p>
     </form>
 
     <script>
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbxdgPoK7zSkKD-o4WEZ11-iHi57bmEpg5uY4GwYNZW5fC7fOgQOv12fShR2PMU_HybW/exec";
+
         function limpiarNumero(valor) {
             return parseFloat(valor.replace(/[^\d]/g, '')) || 0;
         }
@@ -241,6 +244,7 @@
             const negociacion = document.getElementById('negociacion').value;
             const tarifaContainer = document.getElementById('tarifaContainer');
             const descuentoContainer = document.getElementById('descuentoContainer');
+
             tarifaContainer.classList.toggle('hidden', !(negociacion === 'PRONTO PAGO' || negociacion === 'CONVERSO'));
             descuentoContainer.classList.toggle('hidden', negociacion !== 'DESCUENTO');
             calcularValores();
@@ -261,16 +265,21 @@
             let valorAPagar = 0;
             switch (negociacion?.toUpperCase()) {
                 case 'CLÁUSULA ESPECIAL':
-                    valorAPagar = 699999; break;
+                    valorAPagar = 699999;
+                    break;
                 case 'CLÁUSULA PENAL':
-                    valorAPagar = Math.floor(totalPendiente * 0.25); break;
+                    valorAPagar = Math.floor(totalPendiente * 0.25);
+                    break;
                 case 'PAGO TOTAL':
-                    valorAPagar = totalPendiente; break;
+                    valorAPagar = totalPendiente;
+                    break;
                 case 'PRONTO PAGO':
                 case 'CONVERSO':
-                    valorAPagar = Math.max(0, tarifaProntoPago - totalPagos); break;
+                    valorAPagar = Math.max(0, tarifaProntoPago - totalPagos);
+                    break;
                 case 'DESCUENTO':
-                    valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100))); break;
+                    valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100)));
+                    break;
                 default:
                     valorAPagar = 0;
             }
@@ -293,36 +302,38 @@
             document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
         }
 
-        // 🚀 URL CORRECTA DEL SCRIPT
-        const webAppUrl = "https://script.google.com/macros/s/AKfycbxdgPoK7zSkKD-o4WEZ11-iHi57bmEpg5uY4GwYNZW5fC7fOgQOv12fShR2PMU_HybW/exec";
-
-        document.getElementById("formulario").addEventListener("submit", async function(e) {
+        // Envío a Google Apps Script usando JSON
+        document.getElementById("formulario").addEventListener("submit", async function(e){
             e.preventDefault();
             const mensaje = document.getElementById("mensaje");
             mensaje.textContent = "⏳ Enviando datos...";
             mensaje.style.color = "#444";
 
             const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
 
             try {
                 const response = await fetch(webAppUrl, {
                     method: "POST",
-                    body: formData
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(data)
                 });
 
-                const text = await response.text();
-                console.log("Respuesta del servidor:", text);
+                const result = await response.json();
+                console.log(result);
 
-                if (text.includes("success") || text.includes("✅")) {
+                if(result.result === "success"){
                     mensaje.textContent = "✅ Datos guardados correctamente.";
                     mensaje.style.color = "green";
                     this.reset();
                 } else {
-                    mensaje.textContent = "⚠️ Error del servidor: " + text;
+                    mensaje.textContent = "⚠️ Error del servidor: " + result.message;
                     mensaje.style.color = "red";
                 }
-            } catch (err) {
-                console.error(err);
+
+            } catch(error){
+                console.error(error);
                 mensaje.textContent = "❌ Error al enviar los datos. Intenta nuevamente.";
                 mensaje.style.color = "red";
             }
