@@ -1,350 +1,147 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>💰FÁBRICA DE CRÉDITO</title>
-  <style>
-    :root {
-      --primary: #004AAD;
-      --primary-light: #eaf1ff;
-      --bg: #f8faff;
-      --text: #1f1f1f;
-      --radius: 14px;
-    }
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de Gestión de Cartera</title>
+<style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: var(--bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+        font-family: Arial, sans-serif;
+        background-color: #f4f7f9;
+        margin: 0;
+        padding: 0;
     }
-
-    header {
-      text-align: center;
-      margin-top: 40px;
+    .container {
+        width: 90%;
+        max-width: 800px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-
-    header h1 {
-      color: var(--primary);
-      font-size: 26px;
-      margin-bottom: 10px;
+    h2 {
+        text-align: center;
+        color: #333;
     }
-
-    header p {
-      color: #666;
-      font-size: 15px;
-      margin-top: 0;
-    }
-
     form {
-      background-color: white;
-      width: 90%;
-      max-width: 480px;
-      border-radius: var(--radius);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      padding: 30px 40px;
-      margin: 30px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      animation: fadeIn 0.8s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
     }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(25px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
     label {
-      font-weight: 600;
-      color: var(--text);
-      font-size: 14px;
-      margin-bottom: 4px;
+        font-weight: bold;
+        color: #555;
     }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1px solid #d0d8e4;
-      border-radius: 10px;
-      font-size: 15px;
-      transition: all 0.3s ease;
-      background-color: #fafcff;
+    input, select, textarea {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
     }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--primary);
-      background-color: white;
-      box-shadow: 0 0 0 2px var(--primary-light);
-      outline: none;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 60px;
-    }
-
-    input[readonly] {
-      background-color: #eef3ff;
-      border-color: #cbd6f1;
-    }
-
     button {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      padding: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: background 0.3s ease;
+        background-color: #007bff;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
     }
-
     button:hover {
-      background-color: #003a8c;
+        background-color: #0056b3;
     }
-
-    .hidden {
-      display: none;
-    }
-
     #mensaje {
-      text-align: center;
-      font-weight: 600;
-      margin-top: 10px;
+        text-align: center;
+        font-weight: bold;
+        margin-top: 10px;
     }
-  </style>
+</style>
 </head>
 <body>
-  <header>
-    <h1>💸FÁBRICA DE CRÉDITO</h1>
-    <p>Registro de negociaciones</p>
-  </header>
+<div class="container">
+    <h2>Registro de Gestión de Cartera</h2>
+    <form id="formulario">
 
-  <form id="formulario">
-    <label>Etapa</label>
-    <select name="ETAPA" required>
-      <option value=""></option>
-      <option>PREVENTIVA</option>
-      <option>ADMINISTRATIVA</option>
-      <option>PREJURÍDICA</option>
-      <option>JURÍDICA</option>
-    </select>
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required>
 
-    <label>Documento Tercero</label>
-    <input type="text" name="DOCUMENTO_TERCERO" maxlength="10"
-      oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);" />
+        <label for="asesor">Asesor:</label>
+        <input type="text" id="asesor" name="asesor" required>
 
-    <label>Documento Estudiante</label>
-    <input type="text" name="DOCUMENTO_ESTUDIANTE" maxlength="10"
-      oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);" />
+        <label for="entidad">Entidad Financiera:</label>
+        <input type="text" id="entidad" name="entidad" required>
 
-    <label>Documento Titular</label>
-    <input type="text" name="DOCUMENTO_TITULAR" maxlength="10"
-      oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);" />
+        <label for="cliente">Nombre del Cliente:</label>
+        <input type="text" id="cliente" name="cliente" required>
 
-    <label>Contrato</label>
-    <input type="text" name="CONTRATO" required minlength="5" maxlength="16"
-      oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'').slice(0,16);" />
+        <label for="documento">Documento del Cliente:</label>
+        <input type="text" id="documento" name="documento">
 
-    <label>Gestor Asignado</label>
-    <input type="text" name="GESTOR_ASIGNADO" maxlength="10"
-      oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);" />
+        <label for="valor">Valor Total Pendiente:</label>
+        <input type="number" id="valor" name="valor" required>
 
-    <label>Valor Contrato</label>
-    <input type="text" id="valorContrato" name="VALOR_CONTRATO" oninput="calcularValores()" required />
+        <label for="etapa">Etapa:</label>
+        <select id="etapa" name="etapa" required>
+            <option value=""></option>
+            <option value="PREVENTIVA">PREVENTIVA</option>
+            <option value="ADMINISTRATIVA">ADMINISTRATIVA</option>
+            <option value="PREJURÍDICA">PREJURÍDICA</option>
+            <option value="JURÍDICA">JURÍDICA</option>
+        </select>
 
-    <label>Total Pagos</label>
-    <input type="text" id="totalPagos" name="TOTAL_PAGOS" oninput="calcularValores()" required />
+        <label for="negociacion">Negociación:</label>
+        <select id="negociacion" name="negociacion" required>
+            <option value=""></option>
+            <option value="CLÁUSULA ESPECIAL">CLÁUSULA ESPECIAL</option>
+            <option value="CLÁUSULA PENAL">CLÁUSULA PENAL</option>
+            <option value="CLÁUSULA GENERAL">CLÁUSULA GENERAL</option>
+        </select>
 
-    <label>Total Pendiente</label>
-    <input type="text" id="totalPendiente" name="TOTAL_PENDIENTE" readonly />
+        <label for="observaciones">Observaciones:</label>
+        <textarea id="observaciones" name="observaciones" rows="3"></textarea>
 
-    <div id="tarifaContainer" class="hidden">
-      <label>Tarifa Pronto Pago o Converso</label>
-      <input type="text" id="tarifaProntoPago" name="TARIFA_PRONTO_PAGO_O_CONVERSO"
-        oninput="calcularValores()" />
-    </div>
+        <button type="submit">Enviar Registro</button>
+        <p id="mensaje"></p>
+    </form>
+</div>
 
-    <label>Negociación</label>
-    <select id="negociacion" name="NEGOCIACION" required oninput="actualizarCamposCondicionales(); calcularValores();">
-      <option value=""></option>
-      <option>CLÁUSULA ESPECIAL</option>
-      <option>CLÁUSULA PENAL</option>
-      <option>CONVERSO</option>
-      <option>DESCUENTO</option>
-      <option>PRONTO PAGO</option>
-      <option>PAGO TOTAL</option>
-    </select>
+<script>
+const webAppUrl = "https://script.google.com/macros/s/AKfycbx_kr56SOzPVAgCl63dTwV-NFikqPs_Rdj_fYtztYrL7FpFgrXC7G-mdQQMBzxHlYrh/exec";
 
-    <label>Financiera</label>
-    <select name="FINANCIERA" required oninput="calcularValores()">
-      <option value=""></option>
-      <option>ADDI</option>
-      <option>MERCADO PAGO</option>
-      <option>CESANTÍAS</option>
-      <option>BANCO DE BOGOTÁ</option>
-      <option>BANCOOMEVA</option>
-      <option>COMULTRASAN</option>
-      <option>FINCOMERCIO</option>
-    </select>
+document.getElementById("formulario").addEventListener("submit", async function(event) {
+    event.preventDefault();
 
-    <div id="descuentoContainer" class="hidden">
-      <label>% Descuento</label>
-      <input type="number" id="porcentajeDescuento" name="PORCENTAJE_DESCUENTO"
-        step="0.01" min="0" max="100"
-        oninput="if(this.value>100)this.value=100; if(this.value<0)this.value=0; calcularValores();" />
-    </div>
+    const mensaje = document.getElementById("mensaje");
+    mensaje.textContent = "⏳ Enviando datos...";
+    mensaje.style.color = "#333";
 
-    <div id="valorDescuentoContainer" class="hidden">
-      <label>Valor Descuento</label>
-      <input type="text" id="valorDescuento" name="VALOR_DESCUENTO" readonly />
-    </div>
+    const data = new URLSearchParams(new FormData(this));
 
-    <label>Valor a Pagar</label>
-    <input type="text" id="valorPagar" name="VALOR_A_PAGAR" readonly />
-
-    <label>Fecha de Pago</label>
-    <input type="date" name="FECHA_PAGO" required />
-
-    <div id="saldoFinalContainer" class="hidden">
-      <label>Saldo Final</label>
-      <input type="text" id="saldoFinal" name="SALDO_FINAL" readonly />
-    </div>
-
-    <label>Estado</label>
-    <select name="ESTADO" required>
-      <option value=""></option>
-      <option>APROBADO</option>
-    </select>
-
-    <label>Observaciones</label>
-    <textarea name="OBSERVACIONES"></textarea>
-
-    <button type="submit">Guardar</button>
-    <p id="mensaje"></p>
-  </form>
-
-  <script>
-    function limpiarNumero(valor) {
-      return parseFloat(valor.replace(/[^\d]/g, '')) || 0;
-    }
-
-    function formatNumber(num) {
-      return num.toLocaleString('es-CO', { minimumFractionDigits: 0 });
-    }
-
-    function actualizarCamposCondicionales() {
-      const negociacion = document.getElementById('negociacion').value;
-      const tarifaContainer = document.getElementById('tarifaContainer');
-      const descuentoContainer = document.getElementById('descuentoContainer');
-
-      tarifaContainer.classList.toggle('hidden', !(negociacion === 'PRONTO PAGO' || negociacion === 'CONVERSO'));
-      descuentoContainer.classList.toggle('hidden', negociacion !== 'DESCUENTO');
-      calcularValores();
-    }
-
-    function calcularValores() {
-      const valorContrato = limpiarNumero(document.getElementById('valorContrato').value || '0');
-      const totalPagos = limpiarNumero(document.getElementById('totalPagos').value || '0');
-      const tarifaProntoPago = limpiarNumero(document.getElementById('tarifaProntoPago').value || '0');
-      const negociacion = document.getElementById('negociacion').value;
-      const porcentajeDescuento = parseFloat(document.getElementById('porcentajeDescuento').value || '0');
-      const valorDescuentoContainer = document.getElementById('valorDescuentoContainer');
-      const saldoFinalContainer = document.getElementById('saldoFinalContainer');
-
-      let totalPendiente = valorContrato - totalPagos;
-      if (totalPendiente < 0) totalPendiente = 0;
-
-      let valorAPagar = 0;
-      switch (negociacion?.toUpperCase()) {
-        case 'CLÁUSULA ESPECIAL':
-          valorAPagar = 699999;
-          break;
-        case 'CLÁUSULA PENAL':
-          valorAPagar = Math.floor(totalPendiente * 0.25);
-          break;
-        case 'PAGO TOTAL':
-          valorAPagar = totalPendiente;
-          break;
-        case 'PRONTO PAGO':
-        case 'CONVERSO':
-          valorAPagar = Math.max(0, tarifaProntoPago - totalPagos);
-          break;
-        case 'DESCUENTO':
-          valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100)));
-          break;
-        default:
-          valorAPagar = 0;
-      }
-
-      const valorDescuento = Math.max(0, totalPendiente - valorAPagar);
-      let saldoFinal = totalPendiente - valorAPagar - valorDescuento;
-      if (saldoFinal < 0) saldoFinal = 0;
-
-      if (valorAPagar > 0) {
-        valorDescuentoContainer.classList.remove('hidden');
-        saldoFinalContainer.classList.remove('hidden');
-      } else {
-        valorDescuentoContainer.classList.add('hidden');
-        saldoFinalContainer.classList.add('hidden');
-      }
-
-      document.getElementById('totalPendiente').value = formatNumber(totalPendiente);
-      document.getElementById('valorPagar').value = formatNumber(valorAPagar);
-      document.getElementById('valorDescuento').value = formatNumber(valorDescuento);
-      document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
-    }
-
-    // ✅ CONEXIÓN CON GOOGLE APPS SCRIPT
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbx_kr56SOzPVAgCl63dTwV-NFikqPs_Rdj_fYtztYrL7FpFgrXC7G-mdQQMBzxHlYrh/exec";
-
-    document.getElementById("formulario").addEventListener("submit", async function (event) {
-      event.preventDefault();
-      const mensaje = document.getElementById("mensaje");
-      mensaje.textContent = "⏳ Enviando datos...";
-      mensaje.style.color = "#333";
-
-      const formData = Object.fromEntries(new FormData(this));
-
-      try {
+    try {
         const response = await fetch(webAppUrl, {
-          method: "POST",
-          body: JSON.stringify(formData),
-          headers: { "Content-Type": "application/json" },
+            method: "POST",
+            body: data,
         });
 
-        const result = await response.text();
+        const resultText = await response.text();
+        console.log("Respuesta del servidor:", resultText);
 
-        if (result.includes("✅")) {
-          mensaje.textContent = "✅ Datos guardados correctamente.";
-          mensaje.style.color = "green";
-          this.reset();
+        if (resultText.includes("Guardado") || resultText.includes("✅")) {
+            mensaje.textContent = "✅ Datos guardados correctamente.";
+            mensaje.style.color = "green";
+            this.reset();
         } else {
-          mensaje.textContent = result;
-          mensaje.style.color = "red";
+            mensaje.textContent = "⚠️ Error del servidor: " + resultText;
+            mensaje.style.color = "red";
         }
-      } catch (err) {
+    } catch (err) {
         mensaje.textContent = "❌ Error al enviar los datos. Intenta nuevamente.";
         mensaje.style.color = "red";
-      }
-    });
-  </script>
+        console.error(err);
+    }
+});
+</script>
+
 </body>
 </html>
-
