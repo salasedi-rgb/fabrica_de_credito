@@ -11,6 +11,7 @@
             --bg: #f8faff;
             --text: #1f1f1f;
             --radius: 14px;
+            --success: #28a745;  /* Verde para éxito */
         }
 
         body {
@@ -112,6 +113,22 @@
         .hidden {
             display: none;
         }
+
+        /* Estilos para la alerta estética */
+        #customAlert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+            font-size: 14px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -119,6 +136,8 @@
         <h1>💸FÁBRICA DE CRÉDITO</h1>
         <p>Registro de negociaciones</p>
     </header>
+
+    <div id="customAlert" class="hidden">Datos enviados exitosamente</div>  <!-- Alerta personalizada -->
 
     <form id="formulario" action="https://script.google.com/macros/s/AKfycbxkgAwHgc6d3397RNVHgLdOoStyahN4NQ-p6686VwqCf9-bNIlFgHMvoLJajdY1QGrp/exec" method="POST">
         <label>Etapa</label>
@@ -222,15 +241,19 @@
             fetch(this.action, {
                 method: 'POST',
                 body: formData,
-                mode: 'no-cors'  // Agregado para evitar errores de CORS
+                mode: 'no-cors'
             })
             .then(response => {
-                // Con mode: 'no-cors', no puedes leer el cuerpo de la respuesta
-                alert('Datos enviados (sin verificación de respuesta)');
-                this.reset();  // Limpia el formulario
+                // Mostrar alerta estética y limpiar el formulario
+                var alertBox = document.getElementById('customAlert');
+                alertBox.classList.remove('hidden');  // Muestra la alerta
+                this.reset();  // Limpia el formulario inmediatamente
+                setTimeout(() => {
+                    alertBox.classList.add('hidden');  // Oculta la alerta después de 3 segundos
+                }, 3000);  // 3 segundos de duración
             })
             .catch(error => {
-                alert('Error al enviar los datos: ' + error);
+                alert('Error al enviar los datos: ' + error);  // Mantén un alert básico para errores
             });
         });
 
