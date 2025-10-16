@@ -120,7 +120,7 @@
         <p>Registro de negociaciones</p>
     </header>
 
-    <form id="formulario">
+    <form id="formulario" action="https://script.google.com/macros/s/AKfycbxkgAwHgc6d3397RNVHgLdOoStyahN4NQ-p6686VwqCf9-bNIlFgHMvoLJajdY1QGrp/exec" method="POST">
         <label>Etapa</label>
         <select name="ETAPA" required>
             <option value=""></option>
@@ -131,24 +131,19 @@
         </select>
 
         <label>Documento Tercero</label>
-        <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" required maxlength="10"
-               oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
+        <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" required maxlength="10" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
 
         <label>Documento Estudiante</label>
-        <input type="text" id="documentoEstudiante" name="DOCUMENTO_ESTUDIANTE" required maxlength="10"
-               oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
+        <input type="text" id="documentoEstudiante" name="DOCUMENTO_ESTUDIANTE" required maxlength="10" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
 
         <label>Documento Titular</label>
-        <input type="text" id="documentoTitular" name="DOCUMENTO_TITULAR" required maxlength="10"
-               oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
+        <input type="text" id="documentoTitular" name="DOCUMENTO_TITULAR" required maxlength="10" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
 
         <label>Contrato</label>
-        <input type="text" id="contrato" name="CONTRATO" required minlength="5" maxlength="16"
-               oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'').slice(0,16);">
+        <input type="text" id="contrato" name="CONTRATO" required minlength="5" maxlength="16" oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'').slice(0,16);">
 
         <label>Gestor Asignado</label>
-        <input type="text" id="gestorAsignado" name="GESTOR_ASIGNADO" required maxlength="10"
-               oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
+        <input type="text" id="gestorAsignado" name="GESTOR_ASIGNADO" required maxlength="10" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
 
         <label>Valor Contrato</label>
         <input type="text" id="valorContrato" name="VALOR_CONTRATO" oninput="calcularValores()" required>
@@ -189,9 +184,7 @@
 
         <div id="descuentoContainer" class="hidden">
             <label>% Descuento</label>
-            <input type="number" id="porcentajeDescuento" name="PORCENTAJE_DESCUENTO"
-                   step="0.01" min="0" max="100"
-                   oninput="if(this.value>100)this.value=100; if(this.value<0)this.value=0; calcularValores();">
+            <input type="number" id="porcentajeDescuento" name="PORCENTAJE_DESCUENTO" step="0.01" min="0" max="100" oninput="if(this.value>100)this.value=100; if(this.value<0)this.value=0; calcularValores();">
         </div>
 
         <div id="valorDescuentoContainer" class="hidden">
@@ -223,6 +216,24 @@
     </form>
 
     <script>
+        document.getElementById('formulario').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'  // Agregado para evitar errores de CORS
+            })
+            .then(response => {
+                // Con mode: 'no-cors', no puedes leer el cuerpo de la respuesta
+                alert('Datos enviados (sin verificación de respuesta)');
+                this.reset();  // Limpia el formulario
+            })
+            .catch(error => {
+                alert('Error al enviar los datos: ' + error);
+            });
+        });
+
         function limpiarNumero(valor) {
             return parseFloat(valor.replace(/[^\d]/g, '')) || 0;
         }
@@ -235,6 +246,8 @@
             const negociacion = document.getElementById('negociacion').value;
             const tarifaContainer = document.getElementById('tarifaContainer');
             const descuentoContainer = document.getElementById('descuentoContainer');
+            const valorDescuentoContainer = document.getElementById('valorDescuentoContainer');
+            const saldoFinalContainer = document.getElementById('saldoFinalContainer');
 
             tarifaContainer.classList.toggle('hidden', !(negociacion === 'PRONTO PAGO' || negociacion === 'CONVERSO'));
             descuentoContainer.classList.toggle('hidden', negociacion !== 'DESCUENTO');
