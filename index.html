@@ -15,7 +15,6 @@
             --warning: #FFC107;
             --error: #DC3545;
         }
-
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
@@ -24,24 +23,9 @@
             flex-direction: column;
             align-items: center;
         }
-
-        header {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        header h1 {
-            color: var(--primary);
-            font-size: 26px;
-            margin-bottom: 10px;
-        }
-
-        header p {
-            color: #666;
-            font-size: 15px;
-            margin-top: 0;
-        }
-
+        header { text-align: center; margin-top: 40px; }
+        header h1 { color: var(--primary); font-size: 26px; margin-bottom: 10px; }
+        header p { color: #666; font-size: 15px; margin-top: 0; }
         form {
             background-color: white;
             width: 90%;
@@ -55,19 +39,8 @@
             gap: 18px;
             animation: fadeIn 0.8s ease;
         }
-
-        @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(25px);}
-            to {opacity: 1; transform: translateY(0);}
-        }
-
-        label {
-            font-weight: 600;
-            color: var(--text);
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-
+        @keyframes fadeIn { from {opacity: 0; transform: translateY(25px);} to {opacity: 1; transform: translateY(0);} }
+        label { font-weight: 600; color: var(--text); font-size: 14px; margin-bottom: 4px; }
         input, select, textarea {
             width: 100%;
             padding: 12px 14px;
@@ -77,24 +50,14 @@
             transition: all 0.3s ease;
             background-color: #fafcff;
         }
-
         input:focus, select:focus, textarea:focus {
             border-color: var(--primary);
             background-color: white;
             box-shadow: 0 0 0 2px var(--primary-light);
             outline: none;
         }
-
-        textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
-
-        input[readonly] {
-            background-color: #eef3ff;
-            border-color: #cbd6f1;
-        }
-
+        textarea { resize: vertical; min-height: 60px; }
+        input[readonly] { background-color: #eef3ff; border-color: #cbd6f1; }
         button {
             background-color: var(--primary);
             color: white;
@@ -107,15 +70,8 @@
             margin-top: 10px;
             transition: background 0.3s ease;
         }
-
-        button:hover {
-            background-color: #003A8C;
-        }
-
-        .hidden {
-            display: none;
-        }
-
+        button:hover { background-color: #003A8C; }
+        .hidden { display: none; }
         #customAlert {
             position: fixed;
             top: 20px;
@@ -230,7 +186,7 @@
         </select>
 
         <label>Observaciones</label>
-        <textarea name="OBSERVACIONES" oninput="calcularValores()"></textarea>
+        <textarea name="OBSERVACIONES"></textarea>
 
         <button type="submit">Guardar</button>
     </form>
@@ -248,17 +204,14 @@
 
         formulario.addEventListener('submit', function(event) {
             event.preventDefault();
-            mostrarAlerta('🟡 Guardando registro…', 'var(--warning)');
 
-            // Convertir campos ocultos o vacíos a ""
-            const allFields = formulario.querySelectorAll('input, select, textarea');
-            allFields.forEach(field => {
-                if (field.name === "OBSERVACIONES" && !field.value.trim()) {
-                    field.value = "NA";
-                } else if ((field.offsetParent === null || !field.value) && !["OBSERVACIONES"].includes(field.name)) {
-                    field.value = "";
-                }
-            });
+            // Asignar 0 a los campos no obligatorios si están vacíos
+            const docTercero = document.getElementById('documentoTercero');
+            const obs = formulario.querySelector('textarea[name="OBSERVACIONES"]');
+            if (!docTercero.value) docTercero.value = '0';
+            if (!obs.value) obs.value = '0';
+
+            mostrarAlerta('🟡 Guardando registro…', 'var(--warning)');
 
             const formData = new FormData(this);
             fetch(this.action, {
@@ -331,10 +284,10 @@
                 saldoFinalContainer.classList.add('hidden');
             }
 
-            document.getElementById('totalPendiente').value = document.getElementById('totalPendiente').offsetParent !== null ? formatNumber(totalPendiente) : "";
-            document.getElementById('valorPagar').value = document.getElementById('valorPagar').offsetParent !== null ? formatNumber(valorAPagar) : "";
-            document.getElementById('valorDescuento').value = document.getElementById('valorDescuento').offsetParent !== null ? formatNumber(valorDescuento) : "";
-            document.getElementById('saldoFinal').value = document.getElementById('saldoFinal').offsetParent !== null ? formatNumber(saldoFinal) : "";
+            document.getElementById('totalPendiente').value = formatNumber(totalPendiente);
+            document.getElementById('valorPagar').value = formatNumber(valorAPagar);
+            document.getElementById('valorDescuento').value = formatNumber(valorDescuento);
+            document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
         }
     </script>
 </body>
