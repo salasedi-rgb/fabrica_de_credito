@@ -250,11 +250,13 @@
             event.preventDefault();
             mostrarAlerta('🟡 Guardando registro…', 'var(--warning)');
 
-            // Convertir campos ocultos no diligenciados a vacíos
-            const hiddenInputs = formulario.querySelectorAll('input, select, textarea');
-            hiddenInputs.forEach(input => {
-                if (input.offsetParent === null && !input.value) {
-                    input.value = '';
+            // Convertir campos ocultos o vacíos a ""
+            const allFields = formulario.querySelectorAll('input, select, textarea');
+            allFields.forEach(field => {
+                if (field.name === "OBSERVACIONES" && !field.value.trim()) {
+                    field.value = "NA";
+                } else if ((field.offsetParent === null || !field.value) && !["OBSERVACIONES"].includes(field.name)) {
+                    field.value = "";
                 }
             });
 
@@ -308,24 +310,13 @@
 
             let valorAPagar = 0;
             switch (negociacion?.toUpperCase()) {
-                case 'CLÁUSULA ESPECIAL':
-                    valorAPagar = 699999;
-                    break;
-                case 'CLÁUSULA PENAL':
-                    valorAPagar = Math.floor(totalPendiente * 0.25);
-                    break;
-                case 'PAGO TOTAL':
-                    valorAPagar = totalPendiente;
-                    break;
+                case 'CLÁUSULA ESPECIAL': valorAPagar = 699999; break;
+                case 'CLÁUSULA PENAL': valorAPagar = Math.floor(totalPendiente * 0.25); break;
+                case 'PAGO TOTAL': valorAPagar = totalPendiente; break;
                 case 'PRONTO PAGO':
-                case 'CONVERSO':
-                    valorAPagar = Math.max(0, tarifaProntoPago - totalPagos);
-                    break;
-                case 'DESCUENTO':
-                    valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100)));
-                    break;
-                default:
-                    valorAPagar = 0;
+                case 'CONVERSO': valorAPagar = Math.max(0, tarifaProntoPago - totalPagos); break;
+                case 'DESCUENTO': valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100))); break;
+                default: valorAPagar = 0;
             }
 
             const valorDescuento = Math.max(0, totalPendiente - valorAPagar);
@@ -340,10 +331,10 @@
                 saldoFinalContainer.classList.add('hidden');
             }
 
-            document.getElementById('totalPendiente').value = formatNumber(totalPendiente);
-            document.getElementById('valorPagar').value = formatNumber(valorAPagar);
-            document.getElementById('valorDescuento').value = formatNumber(valorDescuento);
-            document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
+            document.getElementById('totalPendiente').value = document.getElementById('totalPendiente').offsetParent !== null ? formatNumber(totalPendiente) : "";
+            document.getElementById('valorPagar').value = document.getElementById('valorPagar').offsetParent !== null ? formatNumber(valorAPagar) : "";
+            document.getElementById('valorDescuento').value = document.getElementById('valorDescuento').offsetParent !== null ? formatNumber(valorDescuento) : "";
+            document.getElementById('saldoFinal').value = document.getElementById('saldoFinal').offsetParent !== null ? formatNumber(saldoFinal) : "";
         }
     </script>
 </body>
