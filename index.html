@@ -112,6 +112,11 @@
         .hidden {
             display: none;
         }
+
+        #mensaje {
+            text-align: center;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -220,6 +225,7 @@
         <textarea name="OBSERVACIONES" oninput="calcularValores()"></textarea>
 
         <button type="submit">Guardar</button>
+        <p id="mensaje"></p>
     </form>
 
     <script>
@@ -293,25 +299,33 @@
             document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
         }
 
-        // 🔗 Conexión con Google Apps Script
-        document.getElementById("formulario").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const form = e.target;
-            const data = new FormData(form);
+        // ✅ Conexión con Google Apps Script
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbxNeRCOir9whJio3o6ksC30E9jWYqAOc-OL4Y3cOOqSjnEpiJHsEZdZiBRPaBNcApvM/exec";
 
-            fetch("https://script.google.com/macros/s/AKfycbxuAz0yK8VXQjCgNjXlxI86MGpmxmu8xrFi7IUERNG0YBsM8EIFbfLZ9xFZ-Yi1DRUg/exec", {
-                method: "POST",
-                body: data
-            })
-            .then(response => response.text())
-            .then(result => {
-                alert("✅ Registro guardado correctamente");
-                form.reset();
-            })
-            .catch(error => {
-                console.error("❌ Error al guardar:", error);
-                alert("Error al enviar los datos. Intenta nuevamente.");
-            });
+        document.getElementById("formulario").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const mensaje = document.getElementById("mensaje");
+            mensaje.textContent = "⏳ Enviando datos...";
+            mensaje.style.color = "#333";
+
+            const data = new FormData(this);
+
+            try {
+                const response = await fetch(webAppUrl, { method: "POST", body: data });
+                const result = await response.json();
+
+                if (result.success) {
+                    mensaje.textContent = "✅ Datos guardados correctamente.";
+                    mensaje.style.color = "green";
+                    this.reset();
+                } else {
+                    mensaje.textContent = "⚠️ Error del servidor: " + result.message;
+                    mensaje.style.color = "red";
+                }
+            } catch (err) {
+                mensaje.textContent = "❌ Error al enviar los datos. Intenta nuevamente.";
+                mensaje.style.color = "red";
+            }
         });
     </script>
 </body>
