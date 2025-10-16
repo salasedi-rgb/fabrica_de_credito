@@ -15,25 +15,21 @@
     --warning: #FFC107;
     --error: #DC3545;
 }
-body { margin:0; font-family:'Segoe UI', sans-serif; background-color: var(--bg); display:flex; flex-direction:column; align-items:center;}
-header { text-align:center; margin-top:40px;}
-header h1 { color: var(--primary); font-size:26px; margin-bottom:10px;}
-header p { color:#666; font-size:15px; margin-top:0;}
-form {
-    background-color:white; width:90%; max-width:480px; border-radius:var(--radius);
-    box-shadow:0 8px 20px rgba(0,0,0,0.08); padding:30px 40px; margin:30px 0;
-    display:flex; flex-direction:column; gap:18px; animation:fadeIn 0.8s ease;
-}
-@keyframes fadeIn { from{opacity:0; transform:translateY(25px);} to{opacity:1; transform:translateY(0);} }
-label { font-weight:600; color:var(--text); font-size:14px; margin-bottom:4px;}
-input, select, textarea { width:100%; padding:12px 14px; border:1px solid #d0d8e4; border-radius:10px; font-size:15px; transition:all 0.3s ease; background-color:#fafcff;}
-input:focus, select:focus, textarea:focus { border-color:var(--primary); background-color:white; box-shadow:0 0 0 2px var(--primary-light); outline:none;}
-textarea { resize:vertical; min-height:60px;}
-input[readonly] { background-color:#eef3ff; border-color:#cbd6f1;}
-button { background-color:var(--primary); color:white; border:none; border-radius:10px; font-size:16px; padding:14px; font-weight:600; cursor:pointer; margin-top:10px; transition: background 0.3s ease;}
-button:hover { background-color:#003A8C;}
-.hidden { display:none; }
-#customAlert { position: fixed; top:20px; right:20px; background-color: var(--success); color:white; padding:15px 20px; border-radius:var(--radius); box-shadow:0 4px 10px rgba(0,0,0,0.1); z-index:1000; animation:fadeIn 0.5s ease; font-size:14px; font-weight:600;}
+body { margin:0; font-family:'Segoe UI',sans-serif; background-color:var(--bg); display:flex; flex-direction:column; align-items:center;}
+header{text-align:center;margin-top:40px;}
+header h1{color:var(--primary); font-size:26px;margin-bottom:10px;}
+header p{color:#666;font-size:15px;margin-top:0;}
+form{background-color:white;width:90%;max-width:480px;border-radius:var(--radius);box-shadow:0 8px 20px rgba(0,0,0,0.08);padding:30px 40px;margin:30px 0;display:flex;flex-direction:column;gap:18px;animation:fadeIn 0.8s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(25px);}to{opacity:1;transform:translateY(0);}}
+label{font-weight:600;color:var(--text);font-size:14px;margin-bottom:4px;}
+input,select,textarea{width:100%;padding:12px 14px;border:1px solid #d0d8e4;border-radius:10px;font-size:15px;transition:all 0.3s ease;background-color:#fafcff;}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);background-color:white;box-shadow:0 0 0 2px var(--primary-light);outline:none;}
+textarea{resize:vertical;min-height:60px;}
+input[readonly]{background-color:#eef3ff;border-color:#cbd6f1;}
+button{background-color:var(--primary);color:white;border:none;border-radius:10px;font-size:16px;padding:14px;font-weight:600;cursor:pointer;margin-top:10px;transition: background 0.3s ease;}
+button:hover{background-color:#003A8C;}
+.hidden{display:none;}
+#customAlert{position:fixed;top:20px;right:20px;background-color:var(--success);color:white;padding:15px 20px;border-radius:var(--radius);box-shadow:0 4px 10px rgba(0,0,0,0.1);z-index:1000;animation:fadeIn 0.5s ease;font-size:14px;font-weight:600;}
 </style>
 </head>
 <body>
@@ -42,7 +38,7 @@ button:hover { background-color:#003A8C;}
 <p>Registro de negociaciones</p>
 </header>
 
-<div id="customAlert" class="hidden">✅ Registro enviado exitosamente</div>
+<div id="customAlert" class="hidden"></div>
 
 <form id="formulario" action="https://script.google.com/macros/s/AKfycbxkgAwHgc6d3397RNVHgLdOoStyahN4NQ-p6686VwqCf9-bNIlFgHMvoLJajdY1QGrp/exec" method="POST">
 <label>Etapa</label>
@@ -108,7 +104,7 @@ button:hover { background-color:#003A8C;}
 
 <div id="descuentoContainer" class="hidden">
 <label>% Descuento 
-<a id="linkDescuento" href="https://docs.google.com/spreadsheets/d/17f4zrszU17kA-E2VgBjGqd9qN3oKUCrDsB6YWy3qwJE/edit?usp=sharing" target="_blank" style="font-size:12px; margin-left:5px; text-decoration:underline; color:var(--primary); display:none;">Ver referencia</a>
+<a id="linkDescuento" href="https://docs.google.com/spreadsheets/d/17f4zrszU17kA-E2VgBjGqd9qN3oKUCrDsB6YWy3qwJE/edit?usp=sharing" target="_blank" style="font-size:12px;margin-left:5px;text-decoration:underline;color:var(--primary);display:none;">Ver referencia</a>
 </label>
 <input type="number" id="porcentajeDescuento" name="PORCENTAJE_DESCUENTO" step="0.01" min="0" max="100" oninput="if(this.value>100)this.value=100;if(this.value<0)this.value=0; calcularValores();">
 </div>
@@ -142,54 +138,41 @@ button:hover { background-color:#003A8C;}
 </form>
 
 <script>
-const formulario=document.getElementById('formulario');
-const alertBox=document.getElementById('customAlert');
+const formulario = document.getElementById('formulario');
+const alertBox = document.getElementById('customAlert');
 
-function mostrarAlerta(mensaje,color){
-    alertBox.textContent=mensaje;
-    alertBox.style.backgroundColor=color;
+function mostrarAlerta(mensaje, color){
+    alertBox.textContent = mensaje;
+    alertBox.style.backgroundColor = color;
     alertBox.classList.remove('hidden');
-    setTimeout(()=>alertBox.classList.add('hidden'),3000);
+    setTimeout(()=> alertBox.classList.add('hidden'),3000);
 }
 
-formulario.addEventListener('submit',function(event){
-    event.preventDefault();
-    const docTercero=document.getElementById('documentoTercero');
-    const obs=formulario.querySelector('textarea[name="OBSERVACIONES"]');
-    if(!docTercero.value) docTercero.value='0';
-    if(!obs.value) obs.value='0';
-    mostrarAlerta('🟡 Guardando registro…','var(--warning)');
-    const formData=new FormData(this);
-    fetch(this.action,{method:'POST',body:formData,mode:'no-cors'})
-    .then(()=>{formulario.reset(); mostrarAlerta('✅ Registro enviado exitosamente','var(--success)');})
-    .catch(error=>{mostrarAlerta('❌ Error al enviar los datos','var(--error)');console.error(error);});
-});
-
-function limpiarNumero(valor){return parseFloat(valor.replace(/[^\d]/g,''))||0;}
-function formatNumber(num){return num.toLocaleString('es-CO',{minimumFractionDigits:0});}
+function limpiarNumero(valor){ return parseFloat(valor.replace(/[^\d]/g,'')) || 0; }
+function formatNumber(num){ return num.toLocaleString('es-CO',{minimumFractionDigits:0}); }
 
 function actualizarCamposCondicionales(){
-    const negociacion=document.getElementById('negociacion').value;
-    const tarifaContainer=document.getElementById('tarifaContainer');
-    const descuentoContainer=document.getElementById('descuentoContainer');
-    const linkDescuento=document.getElementById('linkDescuento');
-    tarifaContainer.classList.toggle('hidden',!(negociacion==='PRONTO PAGO'||negociacion==='CONVERSO'));
-    descuentoContainer.classList.toggle('hidden',negociacion!=='DESCUENTO');
-    linkDescuento.style.display=(negociacion==='DESCUENTO')?'inline':'none';
+    const negociacion = document.getElementById('negociacion').value;
+    const tarifaContainer = document.getElementById('tarifaContainer');
+    const descuentoContainer = document.getElementById('descuentoContainer');
+    const linkDescuento = document.getElementById('linkDescuento');
+    tarifaContainer.classList.toggle('hidden', !(negociacion==='PRONTO PAGO'||negociacion==='CONVERSO'));
+    descuentoContainer.classList.toggle('hidden', negociacion!=='DESCUENTO');
+    linkDescuento.style.display = (negociacion==='DESCUENTO') ? 'inline' : 'none';
     calcularValores();
 }
 
 function calcularValores(){
-    const valorContrato=limpiarNumero(document.getElementById('valorContrato').value||'0');
-    const totalPagos=limpiarNumero(document.getElementById('totalPagos').value||'0');
-    const tarifaProntoPago=limpiarNumero(document.getElementById('tarifaProntoPago').value||'0');
-    const negociacion=document.getElementById('negociacion').value;
-    const porcentajeDescuento=parseFloat(document.getElementById('porcentajeDescuento').value||'0');
-    const valorDescuentoContainer=document.getElementById('valorDescuentoContainer');
-    const saldoFinalContainer=document.getElementById('saldoFinalContainer');
+    const valorContrato = limpiarNumero(document.getElementById('valorContrato').value||'0');
+    const totalPagos = limpiarNumero(document.getElementById('totalPagos').value||'0');
+    const tarifaProntoPago = limpiarNumero(document.getElementById('tarifaProntoPago').value||'0');
+    const negociacion = document.getElementById('negociacion').value;
+    const porcentajeDescuento = parseFloat(document.getElementById('porcentajeDescuento').value||'0');
+    const valorDescuentoContainer = document.getElementById('valorDescuentoContainer');
+    const saldoFinalContainer = document.getElementById('saldoFinalContainer');
 
-    let totalPendiente=valorContrato-totalPagos; if(totalPendiente<0) totalPendiente=0;
-    let valorAPagar=0;
+    let totalPendiente = valorContrato - totalPagos; if(totalPendiente<0) totalPendiente=0;
+    let valorAPagar = 0;
     switch(negociacion?.toUpperCase()){
         case 'CLÁUSULA ESPECIAL': valorAPagar=699999; break;
         case 'CLÁUSULA PENAL': valorAPagar=Math.floor(totalPendiente*0.25); break;
@@ -200,33 +183,46 @@ function calcularValores(){
         default: valorAPagar=0;
     }
 
-    const valorDescuento=Math.max(0,totalPendiente-valorAPagar);
-    let saldoFinal=totalPendiente-valorAPagar-valorDescuento; if(saldoFinal<0) saldoFinal=0;
+    const valorDescuento = Math.max(0,totalPendiente-valorAPagar);
+    let saldoFinal = totalPendiente - valorAPagar - valorDescuento; if(saldoFinal<0) saldoFinal=0;
 
-    if(valorAPagar>0){valorDescuentoContainer.classList.remove('hidden'); saldoFinalContainer.classList.remove('hidden');}
-    else{valorDescuentoContainer.classList.add('hidden'); saldoFinalContainer.classList.add('hidden');}
+    if(valorAPagar>0){ valorDescuentoContainer.classList.remove('hidden'); saldoFinalContainer.classList.remove('hidden'); }
+    else{ valorDescuentoContainer.classList.add('hidden'); saldoFinalContainer.classList.add('hidden'); }
 
-    document.getElementById('totalPendiente').value=formatNumber(totalPendiente);
-    document.getElementById('valorPagar').value=formatNumber(valorAPagar);
-    document.getElementById('valorDescuento').value=formatNumber(valorDescuento);
-    document.getElementById('saldoFinal').value=formatNumber(saldoFinal);
+    document.getElementById('totalPendiente').value = formatNumber(totalPendiente);
+    document.getElementById('valorPagar').value = formatNumber(valorAPagar);
+    document.getElementById('valorDescuento').value = formatNumber(valorDescuento);
+    document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
 }
 
-// Formato dinámico con separador de miles, max 8 dígitos y limpieza al pegar
-['valorContrato','totalPagos'].forEach(id=>{
-    const input=document.getElementById(id);
+// Evento submit optimizado
+formulario.addEventListener('submit', function(e){
+    e.preventDefault();
+    const docT = document.getElementById('documentoTercero');
+    const obs = formulario.querySelector('textarea[name="OBSERVACIONES"]');
+    if(!docT.value) docT.value='0';
+    if(!obs.value) obs.value='0';
+    
+    formulario.reset(); // Limpieza inmediata
+    mostrarAlerta('🟡 Guardando registro…','var(--warning)');
 
-    function formatearValor(){
-        let valor=this.value.replace(/[^\d]/g,'').slice(0,8);
+    fetch(this.action,{method:'POST',body:new FormData(this),mode:'no-cors'})
+    .then(()=> mostrarAlerta('✅ Registro enviado exitosamente','var(--success)'))
+    .catch(()=> mostrarAlerta('❌ Error al enviar los datos','var(--error)'));
+});
+
+// Formato con miles y máximo 8 dígitos
+['valorContrato','totalPagos'].forEach(id=>{
+    const input = document.getElementById(id);
+    function formatear(){
+        let valor = this.value.replace(/[^\d]/g,'').slice(0,8);
         this.value = valor ? parseInt(valor).toLocaleString('es-CO') : '';
         calcularValores();
     }
-
-    input.addEventListener('input', formatearValor);
+    input.addEventListener('input', formatear);
     input.addEventListener('paste', function(e){
         e.preventDefault();
-        let paste = (e.clipboardData || window.clipboardData).getData('text');
-        paste = paste.replace(/[^\d]/g,'').slice(0,8);
+        let paste = (e.clipboardData||window.clipboardData).getData('text').replace(/[^\d]/g,'').slice(0,8);
         this.value = paste ? parseInt(paste).toLocaleString('es-CO') : '';
         calcularValores();
     });
