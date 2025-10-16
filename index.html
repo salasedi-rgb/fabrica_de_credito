@@ -11,7 +11,7 @@
             --bg: #f8faff;
             --text: #1f1f1f;
             --radius: 14px;
-            --success: #28a745;  /* Verde para éxito */
+            --success: #28a745;
         }
 
         body {
@@ -114,20 +114,29 @@
             display: none;
         }
 
-        /* Estilos para la alerta estética */
+        /* Alerta estética con emojis */
         #customAlert {
             position: fixed;
             top: 20px;
             right: 20px;
-            background-color: var(--success);
             color: white;
             padding: 15px 20px;
             border-radius: var(--radius);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             z-index: 1000;
-            animation: fadeIn 0.5s ease;
             font-size: 14px;
             font-weight: 600;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #customAlert.show {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -137,7 +146,7 @@
         <p>Registro de negociaciones</p>
     </header>
 
-    <div id="customAlert" class="hidden">Datos enviados exitosamente</div>  <!-- Alerta personalizada -->
+    <div id="customAlert"></div> <!-- Alerta dinámica -->
 
     <form id="formulario" action="https://script.google.com/macros/s/AKfycbxkgAwHgc6d3397RNVHgLdOoStyahN4NQ-p6686VwqCf9-bNIlFgHMvoLJajdY1QGrp/exec" method="POST">
         <label>Etapa</label>
@@ -235,8 +244,25 @@
     </form>
 
     <script>
-        document.getElementById('formulario').addEventListener('submit', function(event) {
+        const formulario = document.getElementById('formulario');
+        const alertBox = document.getElementById('customAlert');
+
+        function mostrarAlerta(mensaje, color = 'var(--success)') {
+            alertBox.textContent = mensaje;
+            alertBox.style.backgroundColor = color;
+            alertBox.classList.add('show');
+
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 3000);
+        }
+
+        formulario.addEventListener('submit', function(event) {
             event.preventDefault();
+
+            // Alerta "Guardando registro..."
+            mostrarAlerta('🟡 Guardando registro...', '#FFC107');
+
             var formData = new FormData(this);
             fetch(this.action, {
                 method: 'POST',
@@ -244,16 +270,14 @@
                 mode: 'no-cors'
             })
             .then(response => {
-                // Mostrar alerta estética y limpiar el formulario
-                var alertBox = document.getElementById('customAlert');
-                alertBox.classList.remove('hidden');  // Muestra la alerta
-                this.reset();  // Limpia el formulario inmediatamente
                 setTimeout(() => {
-                    alertBox.classList.add('hidden');  // Oculta la alerta después de 3 segundos
-                }, 3000);  // 3 segundos de duración
+                    mostrarAlerta('✅ Registro enviado exitosamente', 'var(--success)');
+                    formulario.reset();
+                }, 1000);
             })
             .catch(error => {
-                alert('Error al enviar los datos: ' + error);  // Mantén un alert básico para errores
+                mostrarAlerta('❌ Error al enviar los datos', '#DC3545');
+                console.error(error);
             });
         });
 
