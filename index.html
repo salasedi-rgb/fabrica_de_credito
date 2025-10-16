@@ -109,14 +109,14 @@
             background-color: #003A8C;
         }
 
+        .hidden {
+            display: none;
+        }
+
         #mensaje {
             text-align: center;
             font-weight: bold;
             margin-top: 10px;
-        }
-
-        .hidden {
-            display: none;
         }
     </style>
 </head>
@@ -127,7 +127,6 @@
     </header>
 
     <form id="formulario">
-        <!-- Todos los campos como estaban antes -->
         <label>Etapa</label>
         <select name="ETAPA" required>
             <option value=""></option>
@@ -231,6 +230,8 @@
     </form>
 
     <script>
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbxdgPoK7zSkKD-o4WEZ11-iHi57bmEpg5uY4GwYNZW5fC7fOgQOv12fShR2PMU_HybW/exec";
+
         function limpiarNumero(valor) {
             return parseFloat(valor.replace(/[^\d]/g, '')) || 0;
         }
@@ -263,24 +264,13 @@
 
             let valorAPagar = 0;
             switch (negociacion?.toUpperCase()) {
-                case 'CLÁUSULA ESPECIAL':
-                    valorAPagar = 699999;
-                    break;
-                case 'CLÁUSULA PENAL':
-                    valorAPagar = Math.floor(totalPendiente * 0.25);
-                    break;
-                case 'PAGO TOTAL':
-                    valorAPagar = totalPendiente;
-                    break;
+                case 'CLÁUSULA ESPECIAL': valorAPagar = 699999; break;
+                case 'CLÁUSULA PENAL': valorAPagar = Math.floor(totalPendiente * 0.25); break;
+                case 'PAGO TOTAL': valorAPagar = totalPendiente; break;
                 case 'PRONTO PAGO':
-                case 'CONVERSO':
-                    valorAPagar = Math.max(0, tarifaProntoPago - totalPagos);
-                    break;
-                case 'DESCUENTO':
-                    valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100)));
-                    break;
-                default:
-                    valorAPagar = 0;
+                case 'CONVERSO': valorAPagar = Math.max(0, tarifaProntoPago - totalPagos); break;
+                case 'DESCUENTO': valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100))); break;
+                default: valorAPagar = 0;
             }
 
             const valorDescuento = Math.max(0, totalPendiente - valorAPagar);
@@ -301,30 +291,23 @@
             document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
         }
 
-        // 🚀 ENVÍO A GOOGLE APPS SCRIPT
-        const webAppUrl = "https://script.google.com/macros/s/AKfycbxQhAmCrhd6oV9jVzPeF5paeFRKoTOI6Tm0JoA4nRJ2NmzZ7g2OPd1ppSnB0pPttVQ/exec";
-
         document.getElementById("formulario").addEventListener("submit", async function (e) {
             e.preventDefault();
             const mensaje = document.getElementById("mensaje");
             mensaje.textContent = "⏳ Enviando datos...";
             mensaje.style.color = "#444";
 
-            // enviar todos los campos, visibles o no
             const data = {};
             const formElements = this.elements;
             for (let i = 0; i < formElements.length; i++) {
                 const el = formElements[i];
-                if (el.name) {
-                    data[el.name] = el.value;
-                }
+                if (el.name) data[el.name] = el.value;
             }
 
             try {
                 const response = await fetch(webAppUrl, {
                     method: "POST",
-                    body: JSON.stringify(data),
-                    headers: { "Content-Type": "application/json" }
+                    body: new URLSearchParams(data),
                 });
 
                 const result = await response.json();
@@ -346,4 +329,3 @@
     </script>
 </body>
 </html>
-
