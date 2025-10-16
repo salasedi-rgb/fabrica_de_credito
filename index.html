@@ -1,332 +1,349 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💰FÁBRICA DE CRÉDITO</title>
-    <style>
-        :root {
-            --primary: #004AAD;
-            --primary-light: #eaf1ff;
-            --bg: #f8faff;
-            --text: #1f1f1f;
-            --radius: 14px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💰FÁBRICA DE CRÉDITO</title>
+  <style>
+    :root {
+      --primary: #004AAD;
+      --primary-light: #eaf1ff;
+      --bg: #f8faff;
+      --text: #1f1f1f;
+      --radius: 14px;
+    }
 
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-        header {
-            text-align: center;
-            margin-top: 40px;
-        }
+    header {
+      text-align: center;
+      margin-top: 40px;
+    }
 
-        header h1 {
-            color: var(--primary);
-            font-size: 26px;
-            margin-bottom: 10px;
-        }
+    header h1 {
+      color: var(--primary);
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
 
-        header p {
-            color: #666;
-            font-size: 15px;
-            margin-top: 0;
-        }
+    header p {
+      color: #666;
+      font-size: 15px;
+      margin-top: 0;
+    }
 
-        form {
-            background-color: white;
-            width: 90%;
-            max-width: 480px;
-            border-radius: var(--radius);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            padding: 30px 40px;
-            margin: 30px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            animation: fadeIn 0.8s ease;
-        }
+    form {
+      background-color: white;
+      width: 90%;
+      max-width: 480px;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      padding: 30px 40px;
+      margin: 30px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      animation: fadeIn 0.8s ease;
+    }
 
-        @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(25px);}
-            to {opacity: 1; transform: translateY(0);}
-        }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        label {
-            font-weight: 600;
-            color: var(--text);
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
+    label {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
 
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #d0d8e4;
-            border-radius: 10px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            background-color: #fafcff;
-        }
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d0d8e4;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      background-color: #fafcff;
+    }
 
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary);
-            background-color: white;
-            box-shadow: 0 0 0 2px var(--primary-light);
-            outline: none;
-        }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      background-color: white;
+      box-shadow: 0 0 0 2px var(--primary-light);
+      outline: none;
+    }
 
-        textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
 
-        input[readonly] {
-            background-color: #eef3ff;
-            border-color: #cbd6f1;
-        }
+    input[readonly] {
+      background-color: #eef3ff;
+      border-color: #cbd6f1;
+    }
 
-        button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            padding: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.3s ease;
-        }
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      padding: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+    }
 
-        button:hover {
-            background-color: #003A8C;
-        }
+    button:hover {
+      background-color: #003a8c;
+    }
 
-        .hidden {
-            display: none;
-        }
+    .hidden {
+      display: none;
+    }
 
-        #mensaje {
-            text-align: center;
-            font-weight: 600;
-        }
-    </style>
+    #mensaje {
+      text-align: center;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>💸FÁBRICA DE CRÉDITO</h1>
-        <p>Registro de negociaciones</p>
-    </header>
+  <header>
+    <h1>💸FÁBRICA DE CRÉDITO</h1>
+    <p>Registro de negociaciones</p>
+  </header>
 
-    <form id="formulario">
-        <label>Etapa</label>
-        <select name="ETAPA" required>
-            <option value=""></option>
-            <option>PREVENTIVA</option>
-            <option>ADMINISTRATIVA</option>
-            <option>PREJURÍDICA</option>
-            <option>JURÍDICA</option>
-        </select>
+  <form id="formulario">
+    <label>Etapa</label>
+    <select name="ETAPA" required>
+      <option value=""></option>
+      <option>PREVENTIVA</option>
+      <option>ADMINISTRATIVA</option>
+      <option>PREJURÍDICA</option>
+      <option>JURÍDICA</option>
+    </select>
 
-        <label>Documento Tercero</label>
-        <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" required maxlength="10"
-               oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
+    <label>Documento Tercero</label>
+    <input type="text" name="DOCUMENTO_TERCERO" maxlength="10"
+      oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);" />
 
-        <label>Documento Estudiante</label>
-        <input type="text" id="documentoEstudiante" name="DOCUMENTO_ESTUDIANTE" required maxlength="10"
-               oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
+    <label>Documento Estudiante</label>
+    <input type="text" name="DOCUMENTO_ESTUDIANTE" maxlength="10"
+      oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);" />
 
-        <label>Documento Titular</label>
-        <input type="text" id="documentoTitular" name="DOCUMENTO_TITULAR" required maxlength="10"
-               oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
+    <label>Documento Titular</label>
+    <input type="text" name="DOCUMENTO_TITULAR" maxlength="10"
+      oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);" />
 
-        <label>Contrato</label>
-        <input type="text" id="contrato" name="CONTRATO" required minlength="5" maxlength="16"
-               oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'').slice(0,16);">
+    <label>Contrato</label>
+    <input type="text" name="CONTRATO" required minlength="5" maxlength="16"
+      oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'').slice(0,16);" />
 
-        <label>Gestor Asignado</label>
-        <input type="text" id="gestorAsignado" name="GESTOR_ASIGNADO" required maxlength="10"
-               oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
+    <label>Gestor Asignado</label>
+    <input type="text" name="GESTOR_ASIGNADO" maxlength="10"
+      oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);" />
 
-        <label>Valor Contrato</label>
-        <input type="text" id="valorContrato" name="VALOR_CONTRATO" oninput="calcularValores()" required>
+    <label>Valor Contrato</label>
+    <input type="text" id="valorContrato" name="VALOR_CONTRATO" oninput="calcularValores()" required />
 
-        <label>Total Pagos</label>
-        <input type="text" id="totalPagos" name="TOTAL_PAGOS" oninput="calcularValores()" required>
+    <label>Total Pagos</label>
+    <input type="text" id="totalPagos" name="TOTAL_PAGOS" oninput="calcularValores()" required />
 
-        <label>Total Pendiente</label>
-        <input type="text" id="totalPendiente" name="TOTAL_PENDIENTE" readonly>
+    <label>Total Pendiente</label>
+    <input type="text" id="totalPendiente" name="TOTAL_PENDIENTE" readonly />
 
-        <div id="tarifaContainer" class="hidden">
-            <label>Tarifa Pronto Pago o Converso</label>
-            <input type="text" id="tarifaProntoPago" name="TARIFA_PRONTO_PAGO_O_CONVERSO" oninput="calcularValores()">
-        </div>
+    <div id="tarifaContainer" class="hidden">
+      <label>Tarifa Pronto Pago o Converso</label>
+      <input type="text" id="tarifaProntoPago" name="TARIFA_PRONTO_PAGO_O_CONVERSO"
+        oninput="calcularValores()" />
+    </div>
 
-        <label>Negociación</label>
-        <select id="negociacion" name="NEGOCIACION" required oninput="actualizarCamposCondicionales(); calcularValores();">
-            <option value=""></option>
-            <option>CLÁUSULA ESPECIAL</option>
-            <option>CLÁUSULA PENAL</option>
-            <option>CONVERSO</option>
-            <option>DESCUENTO</option>
-            <option>PRONTO PAGO</option>
-            <option>PAGO TOTAL</option>
-        </select>
+    <label>Negociación</label>
+    <select id="negociacion" name="NEGOCIACION" required oninput="actualizarCamposCondicionales(); calcularValores();">
+      <option value=""></option>
+      <option>CLÁUSULA ESPECIAL</option>
+      <option>CLÁUSULA PENAL</option>
+      <option>CONVERSO</option>
+      <option>DESCUENTO</option>
+      <option>PRONTO PAGO</option>
+      <option>PAGO TOTAL</option>
+    </select>
 
-        <label>Financiera</label>
-        <select name="FINANCIERA" required oninput="calcularValores()">
-            <option value=""></option>
-            <option>ADDI</option>
-            <option>MERCADO PAGO</option>
-            <option>CESANTÍAS</option>
-            <option>BANCO DE BOGOTÁ</option>
-            <option>BANCOOMEVA</option>
-            <option>COMULTRASAN</option>
-            <option>FINCOMERCIO</option>
-        </select>
+    <label>Financiera</label>
+    <select name="FINANCIERA" required oninput="calcularValores()">
+      <option value=""></option>
+      <option>ADDI</option>
+      <option>MERCADO PAGO</option>
+      <option>CESANTÍAS</option>
+      <option>BANCO DE BOGOTÁ</option>
+      <option>BANCOOMEVA</option>
+      <option>COMULTRASAN</option>
+      <option>FINCOMERCIO</option>
+    </select>
 
-        <div id="descuentoContainer" class="hidden">
-            <label>% Descuento</label>
-            <input type="number" id="porcentajeDescuento" name="PORCENTAJE_DESCUENTO"
-                   step="0.01" min="0" max="100"
-                   oninput="if(this.value>100)this.value=100; if(this.value<0)this.value=0; calcularValores();">
-        </div>
+    <div id="descuentoContainer" class="hidden">
+      <label>% Descuento</label>
+      <input type="number" id="porcentajeDescuento" name="PORCENTAJE_DESCUENTO"
+        step="0.01" min="0" max="100"
+        oninput="if(this.value>100)this.value=100; if(this.value<0)this.value=0; calcularValores();" />
+    </div>
 
-        <div id="valorDescuentoContainer" class="hidden">
-            <label>Valor Descuento</label>
-            <input type="text" id="valorDescuento" name="VALOR_DESCUENTO" readonly>
-        </div>
+    <div id="valorDescuentoContainer" class="hidden">
+      <label>Valor Descuento</label>
+      <input type="text" id="valorDescuento" name="VALOR_DESCUENTO" readonly />
+    </div>
 
-        <label>Valor a Pagar</label>
-        <input type="text" id="valorPagar" name="VALOR_A_PAGAR" readonly>
+    <label>Valor a Pagar</label>
+    <input type="text" id="valorPagar" name="VALOR_A_PAGAR" readonly />
 
-        <label>Fecha de Pago</label>
-        <input type="date" name="FECHA_PAGO" required oninput="calcularValores()">
+    <label>Fecha de Pago</label>
+    <input type="date" name="FECHA_PAGO" required />
 
-        <div id="saldoFinalContainer" class="hidden">
-            <label>Saldo Final</label>
-            <input type="text" id="saldoFinal" name="SALDO_FINAL" readonly>
-        </div>
+    <div id="saldoFinalContainer" class="hidden">
+      <label>Saldo Final</label>
+      <input type="text" id="saldoFinal" name="SALDO_FINAL" readonly />
+    </div>
 
-        <label>Estado</label>
-        <select name="ESTADO" required oninput="calcularValores()">
-            <option value=""></option>
-            <option>APROBADO</option>
-        </select>
+    <label>Estado</label>
+    <select name="ESTADO" required>
+      <option value=""></option>
+      <option>APROBADO</option>
+    </select>
 
-        <label>Observaciones</label>
-        <textarea name="OBSERVACIONES" oninput="calcularValores()"></textarea>
+    <label>Observaciones</label>
+    <textarea name="OBSERVACIONES"></textarea>
 
-        <button type="submit">Guardar</button>
-        <p id="mensaje"></p>
-    </form>
+    <button type="submit">Guardar</button>
+    <p id="mensaje"></p>
+  </form>
 
-    <script>
-        function limpiarNumero(valor) {
-            return parseFloat(valor.replace(/[^\d]/g, '')) || 0;
-        }
+  <script>
+    function limpiarNumero(valor) {
+      return parseFloat(valor.replace(/[^\d]/g, '')) || 0;
+    }
 
-        function formatNumber(num) {
-            return num.toLocaleString('es-CO', {minimumFractionDigits: 0});
-        }
+    function formatNumber(num) {
+      return num.toLocaleString('es-CO', { minimumFractionDigits: 0 });
+    }
 
-        function actualizarCamposCondicionales() {
-            const negociacion = document.getElementById('negociacion').value;
-            const tarifaContainer = document.getElementById('tarifaContainer');
-            const descuentoContainer = document.getElementById('descuentoContainer');
+    function actualizarCamposCondicionales() {
+      const negociacion = document.getElementById('negociacion').value;
+      const tarifaContainer = document.getElementById('tarifaContainer');
+      const descuentoContainer = document.getElementById('descuentoContainer');
 
-            tarifaContainer.classList.toggle('hidden', !(negociacion === 'PRONTO PAGO' || negociacion === 'CONVERSO'));
-            descuentoContainer.classList.toggle('hidden', negociacion !== 'DESCUENTO');
-            calcularValores();
-        }
+      tarifaContainer.classList.toggle('hidden', !(negociacion === 'PRONTO PAGO' || negociacion === 'CONVERSO'));
+      descuentoContainer.classList.toggle('hidden', negociacion !== 'DESCUENTO');
+      calcularValores();
+    }
 
-        function calcularValores() {
-            const valorContrato = limpiarNumero(document.getElementById('valorContrato').value || '0');
-            const totalPagos = limpiarNumero(document.getElementById('totalPagos').value || '0');
-            const tarifaProntoPago = limpiarNumero(document.getElementById('tarifaProntoPago').value || '0');
-            const negociacion = document.getElementById('negociacion').value;
-            const porcentajeDescuento = parseFloat(document.getElementById('porcentajeDescuento').value || '0');
-            const valorDescuentoContainer = document.getElementById('valorDescuentoContainer');
-            const saldoFinalContainer = document.getElementById('saldoFinalContainer');
+    function calcularValores() {
+      const valorContrato = limpiarNumero(document.getElementById('valorContrato').value || '0');
+      const totalPagos = limpiarNumero(document.getElementById('totalPagos').value || '0');
+      const tarifaProntoPago = limpiarNumero(document.getElementById('tarifaProntoPago').value || '0');
+      const negociacion = document.getElementById('negociacion').value;
+      const porcentajeDescuento = parseFloat(document.getElementById('porcentajeDescuento').value || '0');
+      const valorDescuentoContainer = document.getElementById('valorDescuentoContainer');
+      const saldoFinalContainer = document.getElementById('saldoFinalContainer');
 
-            let totalPendiente = valorContrato - totalPagos;
-            if (totalPendiente < 0) totalPendiente = 0;
+      let totalPendiente = valorContrato - totalPagos;
+      if (totalPendiente < 0) totalPendiente = 0;
 
-            let valorAPagar = 0;
-            switch (negociacion?.toUpperCase()) {
-                case 'CLÁUSULA ESPECIAL':
-                    valorAPagar = 699999;
-                    break;
-                case 'CLÁUSULA PENAL':
-                    valorAPagar = Math.floor(totalPendiente * 0.25);
-                    break;
-                case 'PAGO TOTAL':
-                    valorAPagar = totalPendiente;
-                    break;
-                case 'PRONTO PAGO':
-                case 'CONVERSO':
-                    valorAPagar = Math.max(0, tarifaProntoPago - totalPagos);
-                    break;
-                case 'DESCUENTO':
-                    valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100)));
-                    break;
-                default:
-                    valorAPagar = 0;
-            }
+      let valorAPagar = 0;
+      switch (negociacion?.toUpperCase()) {
+        case 'CLÁUSULA ESPECIAL':
+          valorAPagar = 699999;
+          break;
+        case 'CLÁUSULA PENAL':
+          valorAPagar = Math.floor(totalPendiente * 0.25);
+          break;
+        case 'PAGO TOTAL':
+          valorAPagar = totalPendiente;
+          break;
+        case 'PRONTO PAGO':
+        case 'CONVERSO':
+          valorAPagar = Math.max(0, tarifaProntoPago - totalPagos);
+          break;
+        case 'DESCUENTO':
+          valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100)));
+          break;
+        default:
+          valorAPagar = 0;
+      }
 
-            const valorDescuento = Math.max(0, totalPendiente - valorAPagar);
-            let saldoFinal = totalPendiente - valorAPagar - valorDescuento;
-            if (saldoFinal < 0) saldoFinal = 0;
+      const valorDescuento = Math.max(0, totalPendiente - valorAPagar);
+      let saldoFinal = totalPendiente - valorAPagar - valorDescuento;
+      if (saldoFinal < 0) saldoFinal = 0;
 
-            if (valorAPagar > 0) {
-                valorDescuentoContainer.classList.remove('hidden');
-                saldoFinalContainer.classList.remove('hidden');
-            } else {
-                valorDescuentoContainer.classList.add('hidden');
-                saldoFinalContainer.classList.add('hidden');
-            }
+      if (valorAPagar > 0) {
+        valorDescuentoContainer.classList.remove('hidden');
+        saldoFinalContainer.classList.remove('hidden');
+      } else {
+        valorDescuentoContainer.classList.add('hidden');
+        saldoFinalContainer.classList.add('hidden');
+      }
 
-            document.getElementById('totalPendiente').value = formatNumber(totalPendiente);
-            document.getElementById('valorPagar').value = formatNumber(valorAPagar);
-            document.getElementById('valorDescuento').value = formatNumber(valorDescuento);
-            document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
-        }
+      document.getElementById('totalPendiente').value = formatNumber(totalPendiente);
+      document.getElementById('valorPagar').value = formatNumber(valorAPagar);
+      document.getElementById('valorDescuento').value = formatNumber(valorDescuento);
+      document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
+    }
 
-        // ✅ Conexión con Google Apps Script
-        const webAppUrl = "https://script.google.com/macros/s/AKfycbxNeRCOir9whJio3o6ksC30E9jWYqAOc-OL4Y3cOOqSjnEpiJHsEZdZiBRPaBNcApvM/exec";
+    // ✅ CONEXIÓN CON GOOGLE APPS SCRIPT
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbw0bjAEh7C2kq_BApFvearGT8asWwKQTH_tG2zA1r9Fj_bsZIRPCX4PDVgKJhrV-Liu/exec";
 
-        document.getElementById("formulario").addEventListener("submit", async function(event) {
-            event.preventDefault();
-            const mensaje = document.getElementById("mensaje");
-            mensaje.textContent = "⏳ Enviando datos...";
-            mensaje.style.color = "#333";
+    document.getElementById("formulario").addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const mensaje = document.getElementById("mensaje");
+      mensaje.textContent = "⏳ Enviando datos...";
+      mensaje.style.color = "#333";
 
-            const data = new FormData(this);
+      const formData = Object.fromEntries(new FormData(this));
 
-            try {
-                const response = await fetch(webAppUrl, { method: "POST", body: data });
-                const result = await response.json();
-
-                if (result.success) {
-                    mensaje.textContent = "✅ Datos guardados correctamente.";
-                    mensaje.style.color = "green";
-                    this.reset();
-                } else {
-                    mensaje.textContent = "⚠️ Error del servidor: " + result.message;
-                    mensaje.style.color = "red";
-                }
-            } catch (err) {
-                mensaje.textContent = "❌ Error al enviar los datos. Intenta nuevamente.";
-                mensaje.style.color = "red";
-            }
+      try {
+        const response = await fetch(webAppUrl, {
+          method: "POST",
+          body: JSON.stringify(formData),
+          headers: { "Content-Type": "application/json" },
         });
-    </script>
+
+        const result = await response.text();
+
+        if (result.includes("✅")) {
+          mensaje.textContent = "✅ Datos guardados correctamente.";
+          mensaje.style.color = "green";
+          this.reset();
+        } else {
+          mensaje.textContent = result;
+          mensaje.style.color = "red";
+        }
+      } catch (err) {
+        mensaje.textContent = "❌ Error al enviar los datos. Intenta nuevamente.";
+        mensaje.style.color = "red";
+      }
+    });
+  </script>
 </body>
 </html>
