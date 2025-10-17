@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fábrica de crédito</title>
     <style>
-        /* Los estilos permanecen iguales, ya que no afectan la velocidad de envío */
         :root {
             --primary: #004AAD;
             --primary-light: #eaf1ff;
@@ -152,7 +151,7 @@
             alertBox.textContent = mensaje;
             alertBox.style.backgroundColor = color;
             alertBox.classList.remove('hidden');
-            setTimeout(() => alertBox.classList.add('hidden'), 3000);
+            setTimeout(() => alertBox.classList.add('hidden'), 4000);
         }
 
         formulario.addEventListener('submit', async function(event) {
@@ -162,20 +161,26 @@
             if (!docTercero.value) docTercero.value = '0';
             if (!obs.value) obs.value = '0';
 
-            submitButton.disabled = true;  // Desactivar botón para evitar múltiples envíos
-            mostrarAlerta('🟡 Guardando registro…', 'var(--warning)');
+            submitButton.disabled = true;
+            mostrarAlerta('🟡 Validando datos...', 'var(--warning)');
 
             const formData = new FormData(this);
             try {
-                await fetch(this.action, { method: 'POST', body: formData, mode: 'no-cors' });
-                formulario.reset();  // Limpiar formulario inmediatamente después del éxito
-                mostrarAlerta('✅ Registro enviado exitosamente', 'var(--success)');
-                actualizarCamposCondicionales();  // Asegurar que los campos condicionales se oculten
+                const response = await fetch(this.action, { method: 'POST', body: formData });
+                const texto = await response.text();
+
+                if (texto.includes('Error') || texto.includes('Por favor')) {
+                    mostrarAlerta('❌ ' + texto, 'var(--error)');
+                } else {
+                    formulario.reset();
+                    mostrarAlerta('✅ ' + texto, 'var(--success)');
+                    actualizarCamposCondicionales();
+                }
             } catch (error) {
                 mostrarAlerta('❌ Error al enviar los datos', 'var(--error)');
                 console.error(error);
             } finally {
-                submitButton.disabled = false;  // Reactivar botón después del proceso
+                submitButton.disabled = false;
             }
         });
 
@@ -251,5 +256,3 @@
     </script>
 </body>
 </html>
-
-
