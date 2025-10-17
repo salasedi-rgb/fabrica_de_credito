@@ -81,7 +81,7 @@
 
         <div id="tarifaContainer" class="hidden">
             <label>TARIFA PRONTO PAGO O CONVERSO</label>
-            <input type="text" id="tarifaProntoPago" name="TARIFA_PRONTO_PAGO_O_CONVERSO" oninput="calcularValores()">
+            <input type="text" id="tarifaProntoPago" name="TARIFA_PRONTO_PAGO_O_CONVERSO" required>
         </div>
 
         <label>NEGOCIACIÓN</label>
@@ -190,9 +190,14 @@
         function actualizarCamposCondicionales() {
             const negociacion = document.getElementById('negociacion').value;
             const tarifaContainer = document.getElementById('tarifaContainer');
+            const tarifaInput = document.getElementById('tarifaProntoPago');
             const descuentoContainer = document.getElementById('descuentoContainer');
             const linkDescuento = document.getElementById('linkDescuento');
-            tarifaContainer.classList.toggle('hidden', !(negociacion === 'PRONTO PAGO' || negociacion === 'CONVERSO'));
+            
+            const mostrarTarifa = (negociacion === 'PRONTO PAGO' || negociacion === 'CONVERSO');
+            tarifaContainer.classList.toggle('hidden', !mostrarTarifa);
+            if (!mostrarTarifa) tarifaInput.value = '';
+
             descuentoContainer.classList.toggle('hidden', negociacion !== 'DESCUENTO');
             linkDescuento.style.display = (negociacion === 'DESCUENTO') ? 'inline' : 'none';
             calcularValores();
@@ -239,8 +244,9 @@
             document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
         }
 
-        ['valorContrato', 'totalPagos'].forEach(id => {
+        ['valorContrato', 'totalPagos', 'tarifaProntoPago'].forEach(id => {
             const input = document.getElementById(id);
+            if (!input) return;
             input.addEventListener('input', function() {
                 let valor = this.value.replace(/[^\d]/g, '').slice(0, 8);
                 this.value = valor ? parseInt(valor).toLocaleString('es-CO') : '';
