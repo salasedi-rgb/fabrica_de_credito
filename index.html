@@ -270,7 +270,7 @@
             const input=document.getElementById(id);
             if(!input)return;
             input.addEventListener('input',()=>{
-                let v=input.value.replace(/[^\d]/g,'').slice(0,9);
+                let v=input.value.replace(/[^\d]/g,'').slice(0,8);
                 input.value=v?parseInt(v).toLocaleString('es-CO'):'';
                 calcularValores();
             });
@@ -278,4 +278,5 @@
     </script>
 </body>
 </html>
+
 
