@@ -35,6 +35,7 @@
         button:disabled { opacity: 0.6; cursor: not-allowed; }
         .hidden { display:none; }
         #customAlert { position: fixed; top:20px; right:20px; background-color: var(--success); color:white; padding:15px 20px; border-radius:var(--radius); box-shadow:0 4px 10px rgba(0,0,0,0.1); z-index:1000; animation:fadeIn 0.5s ease; font-size:14px; font-weight:600;}
+        #diagnostico {position:fixed;bottom:10px;right:10px;font-size:12px;background:#eef3ff;border-radius:8px;padding:6px 10px;color:#004AAD;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
     </style>
 </head>
 <body>
@@ -44,9 +45,10 @@
     </header>
 
     <div id="customAlert" class="hidden"></div>
+    <div id="diagnostico" class="hidden">Solicitudes activas: <span id="activos">0</span> | Completadas: <span id="completadas">0</span></div>
 
     <!-- URL actualizada -->
-    <form id="formulario" action="https://script.google.com/macros/s/AKfycby9qYtbJPJDFr5jbtxDnSTn-1MccbWA6lYJ_XRkB4EgXMvV9Toi2MnHdcWFtcZaUfw1/exec" method="POST">
+    <form id="formulario" action="https://script.google.com/macros/s/AKfycbxKF_KBc_v2jHHJSGjqN-CAeBRvuNTjUIRtYeaUc6Fo1IOJtW6-vmxehXRtj6JL7dxU/exec" method="POST">
         <label>ETAPA</label>
         <select name="ETAPA" required>
             <option value=""></option>
@@ -57,19 +59,19 @@
         </select>
 
         <label>DOCUMENTO TERCERO</label>
-        <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" maxlength="10" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
+        <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
 
         <label>DOCUMENTO ESTUDIANTE</label>
-        <input type="text" id="documentoEstudiante" name="DOCUMENTO_ESTUDIANTE" required maxlength="10" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
+        <input type="text" id="documentoEstudiante" name="DOCUMENTO_ESTUDIANTE" required maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
 
         <label>DOCUMENTO TITULAR</label>
-        <input type="text" id="documentoTitular" name="DOCUMENTO_TITULAR" required maxlength="10" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
+        <input type="text" id="documentoTitular" name="DOCUMENTO_TITULAR" required maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
 
         <label>CONTRATO</label>
-        <input type="text" id="contrato" name="CONTRATO" required minlength="5" maxlength="16" oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'').slice(0,16);">
+        <input type="text" id="contrato" name="CONTRATO" required minlength="5" maxlength="16" oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'');">
 
         <label>GESTOR ASIGNADO</label>
-        <input type="text" id="gestorAsignado" name="GESTOR_ASIGNADO" required maxlength="10" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').slice(0,10);">
+        <input type="text" id="gestorAsignado" name="GESTOR_ASIGNADO" required maxlength="30">
 
         <label>VALOR CONTRATO</label>
         <input type="text" id="valorContrato" name="VALOR_CONTRATO" required>
@@ -82,7 +84,7 @@
 
         <div id="tarifaContainer" class="hidden">
             <label>TARIFA PRONTO PAGO O CONVERSO</label>
-            <input type="text" id="tarifaProntoPago" name="TARIFA_PRONTO_PAGO_O_CONVERSO" required>
+            <input type="text" id="tarifaProntoPago" name="TARIFA_PRONTO_PAGO_O_CONVERSO">
         </div>
 
         <label>NEGOCIACIÓN</label>
@@ -110,7 +112,7 @@
 
         <div id="descuentoContainer" class="hidden">
             <label>% DESCUENTO 
-                <a id="linkDescuento" href="https://docs.google.com/spreadsheets/d/17f4zrszU17kA-E2VgBjGqd9qN3oKUCrDsB6YWy3qwJE/edit?usp=sharing" target="_blank" style="font-size:12px; margin-left:5px; text-decoration:underline; color:var(--primary); display:none;">Ver tabla de descuentos</a>
+                <a id="linkDescuento" href="https://docs.google.com/spreadsheets/d/17f4zrszU17kA-E2VgBjGqd9qN3oKUCrDsB6YWy3qwJE/edit?usp=sharing" target="_blank" style="font-size:12px; margin-left:5px; text-decoration:underline; color:var(--primary); display:none;">Ver tabla</a>
             </label>
             <input type="number" id="porcentajeDescuento" name="PORCENTAJE_DESCUENTO" step="0.01" min="0" max="100" oninput="if(this.value>100)this.value=100;if(this.value<0)this.value=0; calcularValores();">
         </div>
@@ -132,7 +134,7 @@
         </div>
 
         <label>ESTADO</label>
-        <select name="ESTADO" required oninput="calcularValores()">
+        <select name="ESTADO" required>
             <option value=""></option>
             <option>APROBADO</option>
         </select>
@@ -147,116 +149,109 @@
         const formulario = document.getElementById('formulario');
         const alertBox = document.getElementById('customAlert');
         const submitButton = document.getElementById('submitButton');
+        const diagnostico = document.getElementById('diagnostico');
+        const activos = document.getElementById('activos');
+        const completadas = document.getElementById('completadas');
+        let activas = 0, hechas = 0;
 
-        function mostrarAlerta(mensaje, color) {
-            alertBox.textContent = mensaje;
+        function mostrarAlerta(msg, color) {
+            alertBox.textContent = msg;
             alertBox.style.backgroundColor = color;
             alertBox.classList.remove('hidden');
             setTimeout(() => alertBox.classList.add('hidden'), 4000);
         }
 
-        formulario.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const docTercero = document.getElementById('documentoTercero');
-            const obs = formulario.querySelector('textarea[name="OBSERVACIONES"]');
-            if (!docTercero.value) docTercero.value = '0';
-            if (!obs.value) obs.value = '0';
+        function actualizarDiagnostico() {
+            diagnostico.classList.remove('hidden');
+            activos.textContent = activas;
+            completadas.textContent = hechas;
+        }
 
+        formulario.addEventListener('submit', async (e) => {
+            e.preventDefault();
             submitButton.disabled = true;
-            mostrarAlerta('🟡 Validando datos...', 'var(--warning)');
+            activas++;
+            actualizarDiagnostico();
+            mostrarAlerta('🟡 Enviando datos...', 'var(--warning)');
 
-            const formData = new FormData(this);
+            const formData = new FormData(formulario);
+
             try {
-                const response = await fetch(this.action, { method: 'POST', body: formData });
-                const texto = await response.text();
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 7000); // timeout de 7s
+                const response = await fetch(formulario.action, {
+                    method: 'POST',
+                    body: formData,
+                    signal: controller.signal
+                });
+                clearTimeout(timeout);
+                const text = await response.text();
 
-                if (texto.includes('Error') || texto.includes('Por favor')) {
-                    mostrarAlerta('❌ ' + texto, 'var(--error)');
+                if (text.includes('Error') || text.includes('Por favor')) {
+                    mostrarAlerta('❌ ' + text, 'var(--error)');
                 } else {
                     formulario.reset();
-                    mostrarAlerta('✅ ' + texto, 'var(--success)');
+                    mostrarAlerta('✅ ' + text, 'var(--success)');
                     actualizarCamposCondicionales();
                 }
             } catch (error) {
-                mostrarAlerta('❌ Error al enviar los datos', 'var(--error)');
+                mostrarAlerta('❌ Conexión saturada o interrumpida', 'var(--error)');
                 console.error(error);
             } finally {
+                activas--;
+                hechas++;
+                actualizarDiagnostico();
                 submitButton.disabled = false;
             }
         });
 
-        function limpiarNumero(valor) { return parseFloat(valor.replace(/[^\d]/g, '')) || 0; }
-        function formatNumber(num) { return num.toLocaleString('es-CO', { minimumFractionDigits: 0 }); }
+        // Funciones auxiliares
+        function limpiarNumero(v){return parseFloat(v.replace(/[^\d]/g,''))||0;}
+        function formatNumber(n){return n.toLocaleString('es-CO');}
 
         function actualizarCamposCondicionales() {
-            const negociacion = document.getElementById('negociacion').value;
-            const tarifaContainer = document.getElementById('tarifaContainer');
-            const tarifaInput = document.getElementById('tarifaProntoPago');
-            const descuentoContainer = document.getElementById('descuentoContainer');
-            const linkDescuento = document.getElementById('linkDescuento');
-            
-            const mostrarTarifa = (negociacion === 'PRONTO PAGO' || negociacion === 'CONVERSO');
-            tarifaContainer.classList.toggle('hidden', !mostrarTarifa);
-            if (!mostrarTarifa) tarifaInput.value = '';
-
-            descuentoContainer.classList.toggle('hidden', negociacion !== 'DESCUENTO');
-            linkDescuento.style.display = (negociacion === 'DESCUENTO') ? 'inline' : 'none';
+            const n = document.getElementById('negociacion').value;
+            const tc = document.getElementById('tarifaContainer');
+            const dc = document.getElementById('descuentoContainer');
+            const link = document.getElementById('linkDescuento');
+            tc.classList.toggle('hidden', !(n==='PRONTO PAGO' || n==='CONVERSO'));
+            dc.classList.toggle('hidden', n!=='DESCUENTO');
+            link.style.display = (n==='DESCUENTO')?'inline':'none';
             calcularValores();
         }
 
         function calcularValores() {
-            const valorContrato = limpiarNumero(document.getElementById('valorContrato').value || '0');
-            const totalPagos = limpiarNumero(document.getElementById('totalPagos').value || '0');
-            const tarifaProntoPago = limpiarNumero(document.getElementById('tarifaProntoPago').value || '0');
-            const negociacion = document.getElementById('negociacion').value;
-            const porcentajeDescuento = parseFloat(document.getElementById('porcentajeDescuento').value || '0');
-            const valorDescuentoContainer = document.getElementById('valorDescuentoContainer');
-            const saldoFinalContainer = document.getElementById('saldoFinalContainer');
+            const vC = limpiarNumero(document.getElementById('valorContrato').value||'0');
+            const tP = limpiarNumero(document.getElementById('totalPagos').value||'0');
+            const tPP = limpiarNumero(document.getElementById('tarifaProntoPago').value||'0');
+            const n = document.getElementById('negociacion').value;
+            const pD = parseFloat(document.getElementById('porcentajeDescuento').value||'0');
+            let tPend = Math.max(0, vC - tP);
+            let vPagar = 0;
 
-            let totalPendiente = valorContrato - totalPagos;
-            if (totalPendiente < 0) totalPendiente = 0;
-            let valorAPagar = 0;
-
-            switch (negociacion?.toUpperCase()) {
-                case 'CLÁUSULA ESPECIAL': valorAPagar = 699999; break;
-                case 'CLÁUSULA PENAL': valorAPagar = Math.floor(totalPendiente * 0.25); break;
-                case 'PAGO TOTAL': valorAPagar = totalPendiente; break;
+            switch (n.toUpperCase()) {
+                case 'CLÁUSULA ESPECIAL': vPagar = 699999; break;
+                case 'CLÁUSULA PENAL': vPagar = Math.floor(tPend * 0.25); break;
                 case 'PRONTO PAGO':
-                case 'CONVERSO': valorAPagar = Math.max(0, tarifaProntoPago - totalPagos); break;
-                case 'DESCUENTO': valorAPagar = Math.floor(totalPendiente - (totalPendiente * (porcentajeDescuento / 100))); break;
-                default: valorAPagar = 0;
+                case 'CONVERSO': vPagar = Math.max(0, tPP - tP); break;
+                case 'DESCUENTO': vPagar = Math.floor(tPend - (tPend * (pD / 100))); break;
+                case 'PAGO TOTAL': vPagar = tPend; break;
             }
 
-            const valorDescuento = Math.max(0, totalPendiente - valorAPagar);
-            let saldoFinal = totalPendiente - valorAPagar - valorDescuento;
-            if (saldoFinal < 0) saldoFinal = 0;
-
-            if (valorAPagar > 0) {
-                valorDescuentoContainer.classList.remove('hidden');
-                saldoFinalContainer.classList.remove('hidden');
-            } else {
-                valorDescuentoContainer.classList.add('hidden');
-                saldoFinalContainer.classList.add('hidden');
-            }
-
-            document.getElementById('totalPendiente').value = formatNumber(totalPendiente);
-            document.getElementById('valorPagar').value = formatNumber(valorAPagar);
-            document.getElementById('valorDescuento').value = formatNumber(valorDescuento);
-            document.getElementById('saldoFinal').value = formatNumber(saldoFinal);
+            const vDesc = Math.max(0, tPend - vPagar);
+            const sFinal = Math.max(0, tPend - vPagar - vDesc);
+            document.getElementById('totalPendiente').value = formatNumber(tPend);
+            document.getElementById('valorDescuento').value = formatNumber(vDesc);
+            document.getElementById('valorPagar').value = formatNumber(vPagar);
+            document.getElementById('saldoFinal').value = formatNumber(sFinal);
         }
 
-        ['valorContrato', 'totalPagos', 'tarifaProntoPago'].forEach(id => {
-            const input = document.getElementById(id);
-            if (!input) return;
-            input.addEventListener('input', function() {
-                let valor = this.value.replace(/[^\d]/g, '').slice(0, 8);
-                this.value = valor ? parseInt(valor).toLocaleString('es-CO') : '';
-                calcularValores();
-            });
-            input.addEventListener('paste', function(e) {
-                e.preventDefault();
-                let paste = (e.clipboardData || window.clipboardData).getData('text').replace(/[^\d]/g, '').slice(0, 8);
-                this.value = paste ? parseInt(paste).toLocaleString('es-CO') : '';
+        ['valorContrato','totalPagos','tarifaProntoPago'].forEach(id=>{
+            const input=document.getElementById(id);
+            if(!input)return;
+            input.addEventListener('input',()=>{
+                let v=input.value.replace(/[^\d]/g,'').slice(0,9);
+                input.value=v?parseInt(v).toLocaleString('es-CO'):'';
                 calcularValores();
             });
         });
