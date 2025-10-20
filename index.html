@@ -48,7 +48,7 @@
     <div id="diagnostico" class="hidden">Solicitudes activas: <span id="activos">0</span> | Completadas: <span id="completadas">0</span></div>
 
     <!-- URL actualizada -->
-    <form id="formulario" action="https://script.google.com/macros/s/AKfycbxKF_KBc_v2jHHJSGjqN-CAeBRvuNTjUIRtYeaUc6Fo1IOJtW6-vmxehXRtj6JL7dxU/exec" method="POST">
+    <form id="formulario" action="https://script.google.com/macros/s/AKfycby145-3VAMB-TKAlGV4zJCHOeT0m8sjKCB0dQ65QBmh0vM7nOArhvTd5MVMJaGHj1lm/exec" method="POST">
         <label>ETAPA</label>
         <select name="ETAPA" required>
             <option value=""></option>
@@ -56,6 +56,7 @@
             <option>ADMINISTRATIVA</option>
             <option>PREJURÍDICA</option>
             <option>JURÍDICA</option>
+            <option>JUDICIALIZADA</option>
         </select>
 
         <label>DOCUMENTO TERCERO</label>
@@ -71,7 +72,7 @@
         <input type="text" id="contrato" name="CONTRATO" required minlength="5" maxlength="16" oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'');">
 
         <label>GESTOR ASIGNADO</label>
-        <input type="text" id="gestorAsignado" name="GESTOR_ASIGNADO" required maxlength="30">
+        <input type="text" id="gestorAsignado" name="GESTOR_ASIGNADO" required minlength="5" maxlength="16">
 
         <label>VALOR CONTRATO</label>
         <input type="text" id="valorContrato" name="VALOR_CONTRATO" required>
@@ -167,6 +168,42 @@
             completadas.textContent = hechas;
         }
 
+        // Función para enviar con reintento
+        async function enviarConReintento(formData, intentos = 0) {
+            const maxIntentos = 3;
+            const delay = Math.pow(2, intentos) * 1000; // Backoff exponencial: 1s, 2s, 4s
+
+            try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 15000); // Aumentado a 15s para dar más tiempo
+                const response = await fetch(formulario.action, {
+                    method: 'POST',
+                    body: formData,
+                    signal: controller.signal
+                });
+                clearTimeout(timeout);
+                const text = await response.text();
+
+                if (text.includes('Error') || text.includes('Por favor')) {
+                    throw new Error(text);
+                } else {
+                    formulario.reset();
+                    mostrarAlerta('✅ ' + text, 'var(--success)');
+                    actualizarCamposCondicionales();
+                }
+            } catch (error) {
+                if (intentos < maxIntentos && (error.message.includes('Conexión saturada') || error.name === 'AbortError')) {
+                    mostrarAlerta(`🔄 Reintentando en ${delay / 1000}s... (Intento ${intentos + 1}/${maxIntentos})`, 'var(--warning)');
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    return enviarConReintento(formData, intentos + 1);
+                } else {
+                    mostrarAlerta('❌ ' + (error.message || 'Error desconocido'), 'var(--error)');
+                    console.error(error);
+                    throw error; // Para que el finally se ejecute
+                }
+            }
+        }
+
         formulario.addEventListener('submit', async (e) => {
             e.preventDefault();
             submitButton.disabled = true;
@@ -177,26 +214,9 @@
             const formData = new FormData(formulario);
 
             try {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 7000); // timeout de 7s
-                const response = await fetch(formulario.action, {
-                    method: 'POST',
-                    body: formData,
-                    signal: controller.signal
-                });
-                clearTimeout(timeout);
-                const text = await response.text();
-
-                if (text.includes('Error') || text.includes('Por favor')) {
-                    mostrarAlerta('❌ ' + text, 'var(--error)');
-                } else {
-                    formulario.reset();
-                    mostrarAlerta('✅ ' + text, 'var(--success)');
-                    actualizarCamposCondicionales();
-                }
+                await enviarConReintento(formData);
             } catch (error) {
-                mostrarAlerta('❌ Conexión saturada o interrumpida', 'var(--error)');
-                console.error(error);
+                // Ya manejado en enviarConReintento
             } finally {
                 activas--;
                 hechas++;
