@@ -1,285 +1,339 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fábrica de crédito</title>
-    <style>
-        :root {
-            --primary: #004AAD;
-            --primary-light: #eaf1ff;
-            --bg: #f8faff;
-            --text: #1f1f1f;
-            --radius: 14px;
-            --success: #28a745;
-            --warning: #FFC107;
-            --error: #DC3545;
-        }
-        body { margin:0; font-family:'Segoe UI', sans-serif; background-color: var(--bg); display:flex; flex-direction:column; align-items:center;}
-        header { text-align:center; margin-top:40px;}
-        header h1 { color: var(--primary); font-size:26px; margin-bottom:10px;}
-        header p { color:#666; font-size:15px; margin-top:0;}
-        form {
-            background-color:white; width:90%; max-width:480px; border-radius:var(--radius);
-            box-shadow:0 8px 20px rgba(0,0,0,0.08); padding:30px 40px; margin:30px 0;
-            display:flex; flex-direction:column; gap:18px; animation:fadeIn 0.8s ease;
-        }
-        @keyframes fadeIn { from{opacity:0; transform:translateY(25px);} to{opacity:1; transform:translateY(0);} }
-        label { font-weight:600; color:var(--text); font-size:14px; margin-bottom:4px;}
-        input, select, textarea { width:100%; padding:12px 14px; border:1px solid #d0d8e4; border-radius:10px; font-size:15px; transition:all 0.3s ease; background-color:#fafcff;}
-        input:focus, select:focus, textarea:focus { border-color:var(--primary); background-color:white; box-shadow:0 0 0 2px var(--primary-light); outline:none;}
-        textarea { resize:vertical; min-height:60px;}
-        input[readonly] { background-color:#eef3ff; border-color:#cbd6f1;}
-        button { background-color:var(--primary); color:white; border:none; border-radius:10px; font-size:16px; padding:14px; font-weight:600; cursor:pointer; margin-top:10px; transition: background 0.3s ease;}
-        button:hover { background-color:#003A8C;}
-        button:disabled { opacity: 0.6; cursor: not-allowed; }
-        .hidden { display:none; }
-        #customAlert { position: fixed; top:20px; right:20px; background-color: var(--success); color:white; padding:15px 20px; border-radius:var(--radius); box-shadow:0 4px 10px rgba(0,0,0,0.1); z-index:1000; animation:fadeIn 0.5s ease; font-size:14px; font-weight:600;}
-        #diagnostico {position:fixed;bottom:10px;right:10px;font-size:12px;background:#eef3ff;border-radius:8px;padding:6px 10px;color:#004AAD;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fábrica de crédito</title>
+<style>
+:root {
+  --primary: #004AAD;
+  --primary-light: #eaf1ff;
+  --bg: #f8faff;
+  --text: #1f1f1f;
+  --radius: 14px;
+  --success: #28a745;
+  --warning: #FFC107;
+  --error: #DC3545;
+}
+body {
+  margin:0; font-family:'Segoe UI', sans-serif; background-color: var(--bg);
+  display:flex; flex-direction:column; align-items:center;
+}
+header { text-align:center; margin-top:40px;}
+header h1 { color: var(--primary); font-size:26px; margin-bottom:10px;}
+header p { color:#666; font-size:15px; margin-top:0;}
+form {
+  background-color:white; width:90%; max-width:480px; border-radius:var(--radius);
+  box-shadow:0 8px 20px rgba(0,0,0,0.08); padding:30px 40px; margin:30px 0;
+  display:flex; flex-direction:column; gap:18px; animation:fadeIn 0.8s ease;
+}
+@keyframes fadeIn { from{opacity:0; transform:translateY(25px);} to{opacity:1; transform:translateY(0);} }
+label { font-weight:600; color:var(--text); font-size:14px; margin-bottom:4px;}
+input, select, textarea {
+  width:100%; padding:12px 14px; border:1px solid #d0d8e4; border-radius:10px;
+  font-size:15px; transition:all 0.3s ease; background-color:#fafcff;
+}
+input:focus, select:focus, textarea:focus {
+  border-color:var(--primary); background-color:white; box-shadow:0 0 0 2px var(--primary-light); outline:none;
+}
+textarea { resize:vertical; min-height:60px;}
+input[readonly] { background-color:#eef3ff; border-color:#cbd6f1;}
+button {
+  background-color:var(--primary); color:white; border:none; border-radius:10px;
+  font-size:16px; padding:14px; font-weight:600; cursor:pointer; margin-top:10px;
+  transition: background 0.3s ease;
+}
+button:hover { background-color:#003A8C;}
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+.hidden { display:none; }
+#customAlert {
+  position: fixed; top:20px; right:20px; background-color: var(--success); color:white;
+  padding:15px 20px; border-radius:var(--radius); box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  z-index:1000; animation:fadeIn 0.5s ease; font-size:14px; font-weight:600;
+}
+#diagnostico {
+  position:fixed;bottom:10px;right:10px;font-size:12px;background:#eef3ff;border-radius:8px;
+  padding:6px 10px;color:#004AAD;box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* --- Barra de progreso --- */
+#progressContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background-color: #dfe8ff;
+  overflow: hidden;
+  z-index: 2000;
+  display: none;
+}
+#progressBar {
+  width: 0%;
+  height: 100%;
+  background-color: var(--primary);
+  transition: width 0.2s ease;
+}
+</style>
 </head>
 <body>
-    <header>
-        <h1>💸FÁBRICA DE CRÉDITO</h1>
-        <p>Registro de negociaciones</p>
-    </header>
+<header>
+  <h1>💸FÁBRICA DE CRÉDITO</h1>
+  <p>Registro de negociaciones</p>
+</header>
 
-    <div id="customAlert" class="hidden"></div>
-    <div id="diagnostico" class="hidden">Solicitudes activas: <span id="activos">0</span> | Completadas: <span id="completadas">0</span></div>
+<div id="customAlert" class="hidden"></div>
+<div id="diagnostico" class="hidden">Solicitudes activas: <span id="activos">0</span> | Completadas: <span id="completadas">0</span></div>
 
-    <!-- URL actualizada -->
-    <form id="formulario" action="https://script.google.com/macros/s/AKfycby14vSWLW64hbMqnWelaMZ_8vGXoq-ZwKL3mCmWGW4LOMTcfiQ5TuKo2A2ZnJ4COPGy/exec" method="POST">
-        <label>ETAPA</label>
-        <select name="ETAPA" required>
-            <option value=""></option>
-            <option>PREVENTIVA</option>
-            <option>ADMINISTRATIVA</option>
-            <option>PREJURÍDICA</option>
-            <option>JURÍDICA</option>
-            <option>JUDICIALIZADA</option>
-        </select>
+<!-- Barra de progreso -->
+<div id="progressContainer"><div id="progressBar"></div></div>
 
-        <label>DOCUMENTO TERCERO</label>
-        <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+<form id="formulario" action="https://script.google.com/macros/s/AKfycby14vSWLW64hbMqnWelaMZ_8vGXoq-ZwKL3mCmWGW4LOMTcfiQ5TuKo2A2ZnJ4COPGy/exec" method="POST">
+  <label>ETAPA</label>
+  <select name="ETAPA" required>
+      <option value=""></option>
+      <option>PREVENTIVA</option>
+      <option>ADMINISTRATIVA</option>
+      <option>PREJURÍDICA</option>
+      <option>JURÍDICA</option>
+      <option>JUDICIALIZADA</option>
+  </select>
 
-        <label>DOCUMENTO ESTUDIANTE</label>
-        <input type="text" id="documentoEstudiante" name="DOCUMENTO_ESTUDIANTE" required maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+  <label>DOCUMENTO TERCERO</label>
+  <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
 
-        <label>DOCUMENTO TITULAR</label>
-        <input type="text" id="documentoTitular" name="DOCUMENTO_TITULAR" required maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+  <label>DOCUMENTO ESTUDIANTE</label>
+  <input type="text" id="documentoEstudiante" name="DOCUMENTO_ESTUDIANTE" required maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
 
-        <label>CONTRATO</label>
-        <input type="text" id="contrato" name="CONTRATO" required minlength="5" maxlength="16" oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'');">
+  <label>DOCUMENTO TITULAR</label>
+  <input type="text" id="documentoTitular" name="DOCUMENTO_TITULAR" required maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
 
-        <label>GESTOR ASIGNADO</label>
-        <input type="text" id="gestorAsignado" name="GESTOR_ASIGNADO" required minlength="5" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+  <label>CONTRATO</label>
+  <input type="text" id="contrato" name="CONTRATO" required minlength="5" maxlength="16" oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'');">
 
-        <label>VALOR CONTRATO</label>
-        <input type="text" id="valorContrato" name="VALOR_CONTRATO" required>
+  <label>GESTOR ASIGNADO</label>
+  <input type="text" id="gestorAsignado" name="GESTOR_ASIGNADO" required minlength="5" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
 
-        <label>TOTAL PAGOS</label>
-        <input type="text" id="totalPagos" name="TOTAL_PAGOS" required>
+  <label>VALOR CONTRATO</label>
+  <input type="text" id="valorContrato" name="VALOR_CONTRATO" required>
 
-        <label>TOTAL PENDIENTE</label>
-        <input type="text" id="totalPendiente" name="TOTAL_PENDIENTE" readonly>
+  <label>TOTAL PAGOS</label>
+  <input type="text" id="totalPagos" name="TOTAL_PAGOS" required>
 
-        <div id="tarifaContainer" class="hidden">
-            <label>TARIFA PRONTO PAGO O CONVERSO</label>
-            <input type="text" id="tarifaProntoPago" name="TARIFA_PRONTO_PAGO_O_CONVERSO">
-        </div>
+  <label>TOTAL PENDIENTE</label>
+  <input type="text" id="totalPendiente" name="TOTAL_PENDIENTE" readonly>
 
-        <label>NEGOCIACIÓN</label>
-        <select id="negociacion" name="NEGOCIACION" required oninput="actualizarCamposCondicionales(); calcularValores();">
-            <option value=""></option>
-            <option>CLÁUSULA ESPECIAL</option>
-            <option>CLÁUSULA PENAL</option>
-            <option>CONVERSO</option>
-            <option>DESCUENTO</option>
-            <option>PRONTO PAGO</option>
-            <option>PAGO TOTAL</option>
-        </select>
+  <div id="tarifaContainer" class="hidden">
+      <label>TARIFA PRONTO PAGO O CONVERSO</label>
+      <input type="text" id="tarifaProntoPago" name="TARIFA_PRONTO_PAGO_O_CONVERSO">
+  </div>
 
-        <label>FINANCIERA</label>
-        <select name="FINANCIERA" required oninput="calcularValores()">
-            <option value=""></option>
-            <option>ADDI</option>
-            <option>MERCADO PAGO</option>
-            <option>CESANTÍAS</option>
-            <option>BANCO DE BOGOTÁ</option>
-            <option>BANCOOMEVA</option>
-            <option>COMULTRASAN</option>
-            <option>FINCOMERCIO</option>
-        </select>
+  <label>NEGOCIACIÓN</label>
+  <select id="negociacion" name="NEGOCIACION" required oninput="actualizarCamposCondicionales(); calcularValores();">
+      <option value=""></option>
+      <option>CLÁUSULA ESPECIAL</option>
+      <option>CLÁUSULA PENAL</option>
+      <option>CONVERSO</option>
+      <option>DESCUENTO</option>
+      <option>PRONTO PAGO</option>
+      <option>PAGO TOTAL</option>
+  </select>
 
-        <div id="descuentoContainer" class="hidden">
-            <label>% DESCUENTO 
-                <a id="linkDescuento" href="https://docs.google.com/spreadsheets/d/17f4zrszU17kA-E2VgBjGqd9qN3oKUCrDsB6YWy3qwJE/edit?usp=sharing" target="_blank" style="font-size:12px; margin-left:5px; text-decoration:underline; color:var(--primary); display:none;">Ver tabla</a>
-            </label>
-            <input type="number" id="porcentajeDescuento" name="PORCENTAJE_DESCUENTO" step="0.01" min="0" max="100" oninput="if(this.value>100)this.value=100;if(this.value<0)this.value=0; calcularValores();">
-        </div>
+  <label>FINANCIERA</label>
+  <select name="FINANCIERA" required oninput="calcularValores()">
+      <option value=""></option>
+      <option>ADDI</option>
+      <option>MERCADO PAGO</option>
+      <option>CESANTÍAS</option>
+      <option>BANCO DE BOGOTÁ</option>
+      <option>BANCOOMEVA</option>
+      <option>COMULTRASAN</option>
+      <option>FINCOMERCIO</option>
+  </select>
 
-        <div id="valorDescuentoContainer" class="hidden">
-            <label>VALOR DESCUENTO</label>
-            <input type="text" id="valorDescuento" name="VALOR_DESCUENTO" readonly>
-        </div>
+  <div id="descuentoContainer" class="hidden">
+      <label>% DESCUENTO 
+          <a id="linkDescuento" href="https://docs.google.com/spreadsheets/d/17f4zrszU17kA-E2VgBjGqd9qN3oKUCrDsB6YWy3qwJE/edit?usp=sharing" target="_blank" style="font-size:12px; margin-left:5px; text-decoration:underline; color:var(--primary); display:none;">Ver tabla</a>
+      </label>
+      <input type="number" id="porcentajeDescuento" name="PORCENTAJE_DESCUENTO" step="0.01" min="0" max="100" oninput="if(this.value>100)this.value=100;if(this.value<0)this.value=0; calcularValores();">
+  </div>
 
-        <label>VALOR A PAGAR</label>
-        <input type="text" id="valorPagar" name="VALOR_A_PAGAR" readonly>
+  <div id="valorDescuentoContainer" class="hidden">
+      <label>VALOR DESCUENTO</label>
+      <input type="text" id="valorDescuento" name="VALOR_DESCUENTO" readonly>
+  </div>
 
-        <label>FECHA DE PAGO</label>
-        <input type="date" name="FECHA_PAGO" required oninput="calcularValores()">
+  <label>VALOR A PAGAR</label>
+  <input type="text" id="valorPagar" name="VALOR_A_PAGAR" readonly>
 
-        <div id="saldoFinalContainer" class="hidden">
-            <label>SALDO FINAL</label>
-            <input type="text" id="saldoFinal" name="SALDO_FINAL" readonly>
-        </div>
+  <label>FECHA DE PAGO</label>
+  <input type="date" name="FECHA_PAGO" required oninput="calcularValores()">
 
-        <label>ESTADO</label>
-        <select name="ESTADO" required>
-            <option value=""></option>
-            <option>APROBADO</option>
-        </select>
+  <div id="saldoFinalContainer" class="hidden">
+      <label>SALDO FINAL</label>
+      <input type="text" id="saldoFinal" name="SALDO_FINAL" readonly>
+  </div>
 
-        <label>OBSERVACIONES</label>
-        <textarea name="OBSERVACIONES"></textarea>
+  <label>ESTADO</label>
+  <select name="ESTADO" required>
+      <option value=""></option>
+      <option>APROBADO</option>
+  </select>
 
-        <button type="submit" id="submitButton">Guardar</button>
-    </form>
+  <label>OBSERVACIONES</label>
+  <textarea name="OBSERVACIONES"></textarea>
 
-    <script>
-        const formulario = document.getElementById('formulario');
-        const alertBox = document.getElementById('customAlert');
-        const submitButton = document.getElementById('submitButton');
-        const diagnostico = document.getElementById('diagnostico');
-        const activos = document.getElementById('activos');
-        const completadas = document.getElementById('completadas');
-        let activas = 0, hechas = 0;
+  <button type="submit" id="submitButton">Guardar</button>
+</form>
 
-        function mostrarAlerta(msg, color) {
-            alertBox.textContent = msg;
-            alertBox.style.backgroundColor = color;
-            alertBox.classList.remove('hidden');
-            setTimeout(() => alertBox.classList.add('hidden'), 4000);
-        }
+<script>
+const formulario = document.getElementById('formulario');
+const alertBox = document.getElementById('customAlert');
+const submitButton = document.getElementById('submitButton');
+const diagnostico = document.getElementById('diagnostico');
+const activos = document.getElementById('activos');
+const completadas = document.getElementById('completadas');
+const progressContainer = document.getElementById('progressContainer');
+const progressBar = document.getElementById('progressBar');
+let activas = 0, hechas = 0, progressInterval;
 
-        function actualizarDiagnostico() {
-            diagnostico.classList.remove('hidden');
-            activos.textContent = activas;
-            completadas.textContent = hechas;
-        }
+function mostrarAlerta(msg, color) {
+  alertBox.textContent = msg;
+  alertBox.style.backgroundColor = color;
+  alertBox.classList.remove('hidden');
+  setTimeout(() => alertBox.classList.add('hidden'), 4000);
+}
 
-        // Función para enviar con reintento
-        async function enviarConReintento(formData, intentos = 0) {
-            const maxIntentos = 3;
-            const delay = Math.pow(2, intentos) * 1000; // Backoff exponencial: 1s, 2s, 4s
+function actualizarDiagnostico() {
+  diagnostico.classList.remove('hidden');
+  activos.textContent = activas;
+  completadas.textContent = hechas;
+}
 
-            try {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 15000); // Aumentado a 15s para dar más tiempo
-                const response = await fetch(formulario.action, {
-                    method: 'POST',
-                    body: formData,
-                    signal: controller.signal
-                });
-                clearTimeout(timeout);
-                const text = await response.text();
+function iniciarProgreso() {
+  progressContainer.style.display = 'block';
+  progressBar.style.width = '0%';
+  let width = 0;
+  progressInterval = setInterval(() => {
+    width += Math.random() * 8; 
+    if (width >= 90) width = 90;
+    progressBar.style.width = width + '%';
+  }, 300);
+}
 
-                if (text.includes('Error') || text.includes('Por favor')) {
-                    throw new Error(text);
-                } else {
-                    formulario.reset();
-                    mostrarAlerta('✅ ' + text, 'var(--success)');
-                    actualizarCamposCondicionales();
-                }
-            } catch (error) {
-                if (intentos < maxIntentos && (error.message.includes('Conexión saturada') || error.name === 'AbortError')) {
-                    mostrarAlerta(`🔄 Reintentando en ${delay / 1000}s... (Intento ${intentos + 1}/${maxIntentos})`, 'var(--warning)');
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                    return enviarConReintento(formData, intentos + 1);
-                } else {
-                    mostrarAlerta('❌ ' + (error.message || 'Error desconocido'), 'var(--error)');
-                    console.error(error);
-                    throw error; // Para que el finally se ejecute
-                }
-            }
-        }
+function finalizarProgreso() {
+  clearInterval(progressInterval);
+  progressBar.style.width = '100%';
+  setTimeout(() => {
+    progressContainer.style.display = 'none';
+    progressBar.style.width = '0%';
+  }, 600);
+}
 
-        formulario.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            submitButton.disabled = true;
-            activas++;
-            actualizarDiagnostico();
-            mostrarAlerta('🟡 Enviando datos...', 'var(--warning)');
+// Envío con reintento
+async function enviarConReintento(formData, intentos = 0) {
+  const maxIntentos = 3;
+  const delay = Math.pow(2, intentos) * 1000;
 
-            const formData = new FormData(formulario);
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    const response = await fetch(formulario.action, { method: 'POST', body: formData, signal: controller.signal });
+    clearTimeout(timeout);
+    const text = await response.text();
 
-            try {
-                await enviarConReintento(formData);
-            } catch (error) {
-                // Ya manejado en enviarConReintento
-            } finally {
-                activas--;
-                hechas++;
-                actualizarDiagnostico();
-                submitButton.disabled = false;
-            }
-        });
+    if (text.includes('Error') || text.includes('Por favor')) {
+      throw new Error(text);
+    } else {
+      formulario.reset();
+      mostrarAlerta('✅ ' + text, 'var(--success)');
+      actualizarCamposCondicionales();
+    }
+  } catch (error) {
+    if (intentos < maxIntentos && (error.message.includes('Conexión') || error.name === 'AbortError')) {
+      mostrarAlerta(`🔄 Reintentando en ${delay / 1000}s... (Intento ${intentos + 1}/${maxIntentos})`, 'var(--warning)');
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return enviarConReintento(formData, intentos + 1);
+    } else {
+      mostrarAlerta('❌ ' + (error.message || 'Error desconocido'), 'var(--error)');
+      console.error(error);
+      throw error;
+    }
+  }
+}
 
-        // Funciones auxiliares
-        function limpiarNumero(v){return parseFloat(v.replace(/[^\d]/g,''))||0;}
-        function formatNumber(n){return n.toLocaleString('es-CO');}
+formulario.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  submitButton.disabled = true;
+  activas++;
+  actualizarDiagnostico();
+  iniciarProgreso();
 
-        function actualizarCamposCondicionales() {
-            const n = document.getElementById('negociacion').value;
-            const tc = document.getElementById('tarifaContainer');
-            const dc = document.getElementById('descuentoContainer');
-            const link = document.getElementById('linkDescuento');
-            tc.classList.toggle('hidden', !(n==='PRONTO PAGO' || n==='CONVERSO'));
-            dc.classList.toggle('hidden', n!=='DESCUENTO');
-            link.style.display = (n==='DESCUENTO')?'inline':'none';
-            calcularValores();
-        }
+  const formData = new FormData(formulario);
 
-        function calcularValores() {
-            const vC = limpiarNumero(document.getElementById('valorContrato').value||'0');
-            const tP = limpiarNumero(document.getElementById('totalPagos').value||'0');
-            const tPP = limpiarNumero(document.getElementById('tarifaProntoPago').value||'0');
-            const n = document.getElementById('negociacion').value;
-            const pD = parseFloat(document.getElementById('porcentajeDescuento').value||'0');
-            let tPend = Math.max(0, vC - tP);
-            let vPagar = 0;
+  try {
+    await enviarConReintento(formData);
+  } catch (error) {
+  } finally {
+    finalizarProgreso();
+    activas--;
+    hechas++;
+    actualizarDiagnostico();
+    submitButton.disabled = false;
+  }
+});
 
-            switch (n.toUpperCase()) {
-                case 'CLÁUSULA ESPECIAL': vPagar = 699999; break;
-                case 'CLÁUSULA PENAL': vPagar = Math.floor(tPend * 0.25); break;
-                case 'PRONTO PAGO':
-                case 'CONVERSO': vPagar = Math.max(0, tPP - tP); break;
-                case 'DESCUENTO': vPagar = Math.floor(tPend - (tPend * (pD / 100))); break;
-                case 'PAGO TOTAL': vPagar = tPend; break;
-            }
+// Funciones auxiliares
+function limpiarNumero(v){return parseFloat(v.replace(/[^\d]/g,''))||0;}
+function formatNumber(n){return n.toLocaleString('es-CO');}
 
-            const vDesc = Math.max(0, tPend - vPagar);
-            const sFinal = Math.max(0, tPend - vPagar - vDesc);
-            document.getElementById('totalPendiente').value = formatNumber(tPend);
-            document.getElementById('valorDescuento').value = formatNumber(vDesc);
-            document.getElementById('valorPagar').value = formatNumber(vPagar);
-            document.getElementById('saldoFinal').value = formatNumber(sFinal);
-        }
+function actualizarCamposCondicionales() {
+  const n = document.getElementById('negociacion').value;
+  const tc = document.getElementById('tarifaContainer');
+  const dc = document.getElementById('descuentoContainer');
+  const link = document.getElementById('linkDescuento');
+  tc.classList.toggle('hidden', !(n==='PRONTO PAGO' || n==='CONVERSO'));
+  dc.classList.toggle('hidden', n!=='DESCUENTO');
+  link.style.display = (n==='DESCUENTO')?'inline':'none';
+  calcularValores();
+}
 
-        ['valorContrato','totalPagos','tarifaProntoPago'].forEach(id=>{
-            const input=document.getElementById(id);
-            if(!input)return;
-            input.addEventListener('input',()=>{
-                let v=input.value.replace(/[^\d]/g,'').slice(0,8);
-                input.value=v?parseInt(v).toLocaleString('es-CO'):'';
-                calcularValores();
-            });
-        });
-    </script>
+function calcularValores() {
+  const vC = limpiarNumero(document.getElementById('valorContrato').value||'0');
+  const tP = limpiarNumero(document.getElementById('totalPagos').value||'0');
+  const tPP = limpiarNumero(document.getElementById('tarifaProntoPago').value||'0');
+  const n = document.getElementById('negociacion').value;
+  const pD = parseFloat(document.getElementById('porcentajeDescuento').value||'0');
+  let tPend = Math.max(0, vC - tP);
+  let vPagar = 0;
+
+  switch (n.toUpperCase()) {
+    case 'CLÁUSULA ESPECIAL': vPagar = 699999; break;
+    case 'CLÁUSULA PENAL': vPagar = Math.floor(tPend * 0.25); break;
+    case 'PRONTO PAGO':
+    case 'CONVERSO': vPagar = Math.max(0, tPP - tP); break;
+    case 'DESCUENTO': vPagar = Math.floor(tPend - (tPend * (pD / 100))); break;
+    case 'PAGO TOTAL': vPagar = tPend; break;
+  }
+
+  const vDesc = Math.max(0, tPend - vPagar);
+  const sFinal = Math.max(0, tPend - vPagar - vDesc);
+  document.getElementById('totalPendiente').value = formatNumber(tPend);
+  document.getElementById('valorDescuento').value = formatNumber(vDesc);
+  document.getElementById('valorPagar').value = formatNumber(vPagar);
+  document.getElementById('saldoFinal').value = formatNumber(sFinal);
+}
+
+['valorContrato','totalPagos','tarifaProntoPago'].forEach(id=>{
+  const input=document.getElementById(id);
+  if(!input)return;
+  input.addEventListener('input',()=>{
+    let v=input.value.replace(/[^\d]/g,'').slice(0,8);
+    input.value=v?parseInt(v).toLocaleString('es-CO'):'';
+    calcularValores();
+  });
+});
+</script>
 </body>
 </html>
-
-
-
-
 
