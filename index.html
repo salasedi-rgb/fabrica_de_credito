@@ -52,10 +52,6 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   padding:15px 20px; border-radius:var(--radius); box-shadow:0 4px 10px rgba(0,0,0,0.1);
   z-index:1000; animation:fadeIn 0.5s ease; font-size:14px; font-weight:600;
 }
-#diagnostico {
-  position:fixed;bottom:10px;right:10px;font-size:12px;background:#eef3ff;border-radius:8px;
-  padding:6px 10px;color:#004AAD;box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}
 
 /* --- Barra de progreso --- */
 #progressContainer {
@@ -79,12 +75,11 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 </head>
 <body>
 <header>
-  <h1>💸FÁBRICA DE CRÉDITO</h1>
+  <h1>FÁBRICA DE CRÉDITO</h1>
   <p>Registro de negociaciones</p>
 </header>
 
 <div id="customAlert" class="hidden"></div>
-<div id="diagnostico" class="hidden">Solicitudes activas: <span id="activos">0</span> | Completadas: <span id="completadas">0</span></div>
 
 <!-- Barra de progreso -->
 <div id="progressContainer"><div id="progressBar"></div></div>
@@ -191,24 +186,15 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 const formulario = document.getElementById('formulario');
 const alertBox = document.getElementById('customAlert');
 const submitButton = document.getElementById('submitButton');
-const diagnostico = document.getElementById('diagnostico');
-const activos = document.getElementById('activos');
-const completadas = document.getElementById('completadas');
 const progressContainer = document.getElementById('progressContainer');
 const progressBar = document.getElementById('progressBar');
-let activas = 0, hechas = 0, progressInterval;
+let progressInterval;
 
 function mostrarAlerta(msg, color) {
   alertBox.textContent = msg;
   alertBox.style.backgroundColor = color;
   alertBox.classList.remove('hidden');
   setTimeout(() => alertBox.classList.add('hidden'), 4000);
-}
-
-function actualizarDiagnostico() {
-  diagnostico.classList.remove('hidden');
-  activos.textContent = activas;
-  completadas.textContent = hechas;
 }
 
 function iniciarProgreso() {
@@ -266,8 +252,6 @@ async function enviarConReintento(formData, intentos = 0) {
 formulario.addEventListener('submit', async (e) => {
   e.preventDefault();
   submitButton.disabled = true;
-  activas++;
-  actualizarDiagnostico();
   iniciarProgreso();
 
   const formData = new FormData(formulario);
@@ -277,9 +261,6 @@ formulario.addEventListener('submit', async (e) => {
   } catch (error) {
   } finally {
     finalizarProgreso();
-    activas--;
-    hechas++;
-    actualizarDiagnostico();
     submitButton.disabled = false;
   }
 });
@@ -337,5 +318,4 @@ function calcularValores() {
 </script>
 </body>
 </html>
-
 
