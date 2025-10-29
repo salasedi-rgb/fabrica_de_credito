@@ -292,8 +292,8 @@ function calcularValores() {
   switch (n.toUpperCase()) {
     case 'CLÁUSULA ESPECIAL': vPagar = 699999; break;
     case 'CLÁUSULA PENAL': vPagar = Math.floor(tPend * 0.25); break;
-    case 'PRONTO PAGO':
-    case 'CONVERSO': vPagar = Math.max(0, tPP - tP); break;
+    case 'PRONTO PAGO': vPagar = Math.max(0, tPP - tP); break;
+    case 'CONVERSO': vPagar = tPP; break;
     case 'DESCUENTO': vPagar = Math.floor(tPend - (tPend * (pD / 100))); break;
     case 'PAGO TOTAL': vPagar = tPend; break;
   }
@@ -318,5 +318,6 @@ function calcularValores() {
 </script>
 </body>
 </html>
+
 
 
