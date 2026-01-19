@@ -227,15 +227,16 @@ async function enviarConReintento(formData, intentos = 0) {
     const timeout = setTimeout(() => controller.abort(), 15000);
     const response = await fetch(formulario.action, { method: 'POST', body: formData, signal: controller.signal });
     clearTimeout(timeout);
-    const text = await response.text();
+    const data = await response.json();
 
-    if (text.includes('Error') || text.includes('Por favor')) {
-      throw new Error(text);
-    } else {
-      formulario.reset();
-      mostrarAlerta('✅ ' + text, 'var(--success)');
-      actualizarCamposCondicionales();
-    }
+if (!data.success) {
+  throw new Error(data.message);
+}
+
+formulario.reset();
+mostrarAlerta('✅ ' + data.message, 'var(--success)');
+actualizarCamposCondicionales();
+   
   } catch (error) {
     if (intentos < maxIntentos && (error.message.includes('Conexión') || error.name === 'AbortError')) {
       mostrarAlerta(`🔄 Reintentando en ${delay / 1000}s... (Intento ${intentos + 1}/${maxIntentos})`, 'var(--warning)');
@@ -318,6 +319,7 @@ function calcularValores() {
 </script>
 </body>
 </html>
+
 
 
 
