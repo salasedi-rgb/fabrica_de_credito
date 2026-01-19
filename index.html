@@ -84,7 +84,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 <!-- Barra de progreso -->
 <div id="progressContainer"><div id="progressBar"></div></div>
 
-<form id="formulario" action="https://script.google.com/a/macros/smartidiomas.edu.co/s/AKfycbxZd11p0RolicFz6JHMNX9uLLwjoytbAkjzet4aWFS4txOXMLtj8gHQOXwjGqbs_Kc5/exec" method="POST">
+<form id="formulario" action="https://script.google.com/macros/s/AKfycbzqh_4lPsmTBqlZLDbNAj5Z3O-Bi9rDYjJ3N3Esz1wcT1U3PfO71Iy5C5AraXgiO79A/exec" method="POST">
   <label>ETAPA</label>
   <select name="ETAPA" required>
       <option value=""></option>
@@ -227,16 +227,15 @@ async function enviarConReintento(formData, intentos = 0) {
     const timeout = setTimeout(() => controller.abort(), 15000);
     const response = await fetch(formulario.action, { method: 'POST', body: formData, signal: controller.signal });
     clearTimeout(timeout);
-    const data = await response.json();
+    const text = await response.text();
 
-if (!data.success) {
-  throw new Error(data.message);
-}
-
-formulario.reset();
-mostrarAlerta('✅ ' + data.message, 'var(--success)');
-actualizarCamposCondicionales();
-   
+    if (text.includes('Error') || text.includes('Por favor')) {
+      throw new Error(text);
+    } else {
+      formulario.reset();
+      mostrarAlerta('✅ ' + text, 'var(--success)');
+      actualizarCamposCondicionales();
+    }
   } catch (error) {
     if (intentos < maxIntentos && (error.message.includes('Conexión') || error.name === 'AbortError')) {
       mostrarAlerta(`🔄 Reintentando en ${delay / 1000}s... (Intento ${intentos + 1}/${maxIntentos})`, 'var(--warning)');
@@ -319,7 +318,6 @@ function calcularValores() {
 </script>
 </body>
 </html>
-
 
 
 
